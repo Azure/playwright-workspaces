@@ -1,0 +1,63 @@
+### YamlMime:Landing
+
+title: Playwright Workspaces documentation
+summary: Learn how to run end-to-end tests for your web apps at scale with Playwright Workspaces. Run Playwright tests with high parallelization across different operating system and browser combinations simultaneously. Tutorials, code examples, GitHub Actions, Azure Pipelines, and more.
+
+metadata:
+  title: Playwright Workspaces documentation
+  description: Learn how to run end-to-end tests for your web apps at scale with Playwright Workspaces. Run Playwright tests with high parallelization across different operating system and browser combinations simultaneously. Tutorials, code examples, GitHub Actions, Azure Pipelines, and more.
+  ms.service: playwright-testing
+  ms.topic: landing-page
+
+  ms.author: johnsta
+  author: vvs11
+  ms.date: 08/23/2023
+  ms.custom: playwright-workspaces-preview
+
+# linkListType: architecture | concept | deploy | download | get-started | how-to-guide | learn | overview | quickstart | reference | sample | tutorial | video | whats-new
+
+landingContent:
+  # Card
+  - title: About Playwright Workspaces
+    linkLists:
+      - linkListType: overview
+        links:
+          - text: What is Playwright Workspaces?
+            url: overview-what-is-microsoft-playwright-workspaces.md
+          - text: Try Playwright Workspaces for free
+            url: how-to-try-playwright-workspaces-free.md
+
+  # Card
+  - title: Get started
+    linkLists:
+      - linkListType: quickstart
+        links:
+          - text: Run end-to-end web tests at scale
+            url: quickstart-run-end-to-end-tests.md
+          - text: Set up continuous end-to-end testing
+            url: quickstart-automate-end-to-end-testing.md
+
+      - linkListType: concept
+        links:
+          - text: Determine optimal test suite configuration
+            url: concept-determine-optimal-configuration.md
+
+  - title: Manage workspaces
+    linkLists:
+      - linkListType: how-to-guide
+        links:
+          - text: Optimize regional latency
+            url: how-to-optimize-regional-latency.md
+          - text: Manage workspaces
+            url: how-to-manage-playwright-workspace.md
+
+  - title: Security
+    linkLists:
+      - linkListType: how-to-guide
+        links:
+          - text: Manage access tokens
+            url: how-to-manage-access-tokens.md
+          - text: Manage workspace access
+            url: how-to-manage-workspace-access.md
+          - text: Manage authentication
+            url: how-to-manage-authentication.md
