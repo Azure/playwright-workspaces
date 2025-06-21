@@ -64,7 +64,7 @@ You can configure the `ExposeNetwork` option in `.runsettings`. The following ex
 You can now reference `localhost` in the Playwright test code, and run the tests on cloud-hosted browsers with Playwright Workspaces:
 
 ```bash
-dotnet test --settings:.runsettings --logger "microsoft-playwright-testing" -- NUnit.NumberOfTestWorkers=20
+dotnet test --settings:.runsettings -- NUnit.NumberOfTestWorkers=20
 ```
 
 ::: zone-end

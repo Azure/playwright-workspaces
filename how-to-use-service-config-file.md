@@ -164,14 +164,6 @@ Here's version of the `.runsettings` file with all the available options:
       <!--Channel>msedge</Channel-->
     </LaunchOptions>
   </Playwright>
-    <LoggerRunSettings>
-        <Loggers>
-            <!--playwright workspaces logger for reporting -->
-            <Logger friendlyName="microsoft-playwright-testing" enabled="true" />
-            <!--could enable any logger additionally -->
-            <Logger friendlyName="trx" enabled="false" />
-        </Loggers>
-    </LoggerRunSettings>
 </RunSettings>
 
 ```

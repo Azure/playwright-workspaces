@@ -120,7 +120,7 @@ npx playwright test --config=playwright.service.config.ts --workers=20
 
 ::: zone pivot="nunit-test-runner"
 ```bash
-dotnet test --settings:.runsettings --logger "microsoft-playwright-testing" -- NUnit.NumberOfTestWorkers=20
+dotnet test --settings:.runsettings -- NUnit.NumberOfTestWorkers=20
 ```
 ::: zone-end
 ## Related content

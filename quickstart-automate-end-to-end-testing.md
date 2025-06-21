@@ -382,7 +382,7 @@ Update the CI workflow definition to run your Playwright tests with the Playwrig
               # Regional endpoint for Playwright Workspaces
               PLAYWRIGHT_SERVICE_URL: ${{ secrets.PLAYWRIGHT_SERVICE_URL }}
               # PLAYWRIGHT_SERVICE_ACCESS_TOKEN: ${{ secrets.PLAYWRIGHT_SERVICE_ACCESS_TOKEN }} # Not recommended, use Microsoft Entra ID authentication. 
-            run: dotnet test --settings:.runsettings --logger "microsoft-playwright-testing" -- NUnit.NumberOfTestWorkers=20
+            run: dotnet test --settings:.runsettings -- NUnit.NumberOfTestWorkers=20
 
           - name: Upload Playwright report
             uses: actions/upload-artifact@v3
@@ -423,7 +423,7 @@ Update the CI workflow definition to run your Playwright tests with the Playwrig
         scriptType: 'pscore'
         scriptLocation: 'inlineScript'
         inlineScript: |
-          dotnet test --settings:.runsettings --logger "microsoft-playwright-testing" -- NUnit.NumberOfTestWorkers=20
+          dotnet test --settings:.runsettings -- NUnit.NumberOfTestWorkers=20
       addSpnToEnvironment: true
       workingDirectory: path/to/playwright/folder # update accordingly
 
