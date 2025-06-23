@@ -44,9 +44,7 @@ items:
       displayName: local, localhost, internal app, private apps, private endpoint
       href: how-to-test-local-applications.md
     - name: Configure visual comparisons
-      href: how-to-configure-visual-comparisons.md   
-    - name: Monitor Playwright Workspaces
-      href: monitor-playwright-workspaces.md
+      href: how-to-configure-visual-comparisons.md    
     - name: Manage authentication
       href: how-to-manage-authentication.md
     - name: Use service package options
@@ -81,8 +79,3 @@ items:
     - name: Service limits
       displayName: quotas, limits, capacity, supported browsers, supported platforms, supported operating systems, supported OS, supported OSes, supported OSs, supported devices, supported device, supported mobile devices, supported mobile device, supported mobile OS, supported mobile OSes, supported mobile operating systems, supported mobile operating system,
       href: resource-limits-quotas-capacity.md
-- name: Reference
-  expanded: false
-  items: 
-    - name: Monitoring data reference
-      href: monitor-playwright-workspaces-reference.md
