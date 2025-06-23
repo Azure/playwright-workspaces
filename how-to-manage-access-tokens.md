@@ -21,7 +21,7 @@ You can create multiple access tokens per workspace, for example to distinguish 
 
 - An Azure account with an active subscription. [Create an account for free](https://azure.microsoft.com/free/?WT.mc_id=A261C142F).
 - A Playwright workspace. To create a workspace, see [Quickstart: Run Playwright tests at scale](./quickstart-run-end-to-end-tests.md).
-- To create or delete access tokens, your Azure account needs to have the [Contributor](/azure/role-based-access-control/built-in-roles#owner) or [Owner](/azure/role-based-access-control/built-in-roles#contributor) role at the workspace level. Learn more about [managing access to a workspace](./how-to-manage-workspace-access.md).
+- To create or delete access tokens, your Azure account needs to have the [Contributor](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#owner) or [Owner](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#contributor) role at the workspace level. Learn more about [managing access to a workspace](./how-to-manage-workspace-access.md).
 
 ## Protect your access tokens
 

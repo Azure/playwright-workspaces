@@ -37,4 +37,4 @@ Operational log entries include elements listed in the following table:
 ## Related content
 
 - See [Monitor Playwright Workspaces](./monitor-playwright-workspaces.md) for a description of monitoring Playwright Workspaces.
-- See [Monitor Azure resources with Azure Monitor](/azure/azure-monitor/essentials/monitor-azure-resource) for details on monitoring Azure resources.
+- See [Monitor Azure resources with Azure Monitor](https://learn.microsoft.com/azure/azure-monitor/essentials/monitor-azure-resource) for details on monitoring Azure resources.

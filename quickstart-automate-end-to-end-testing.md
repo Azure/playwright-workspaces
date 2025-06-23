@@ -27,12 +27,12 @@ After you complete this quickstart, you have a CI workflow that runs your Playwr
 - A GitHub account. If you don't have a GitHub account, you can [create one for free](https://github.com/).
 - A GitHub repository that contains your Playwright test specifications and GitHub Actions workflow. To create a repository, see [Creating a new repository](https://docs.github.com/github/creating-cloning-and-archiving-repositories/creating-a-new-repository).
 - A GitHub Actions workflow. If you need help with getting started with GitHub Actions, see [create your first workflow](https://docs.github.com/en/actions/quickstart)
-- Set up authentication from GitHub Actions to Azure. See [Use GitHub Actions to connect to Azure](/azure/developer/github/connect-from-azure)
+- Set up authentication from GitHub Actions to Azure. See [Use GitHub Actions to connect to Azure](https://learn.microsoft.com/azure/developer/github/connect-from-azure)
 
 # [Azure Pipelines](#tab/pipelines)
-- An Azure DevOps organization and project. If you don't have an Azure DevOps organization, you can [create one for free](/azure/devops/organizations/projects/create-project).
-- A pipeline definition. If you need help with getting started with Azure Pipelines, see [create your first pipeline](/azure/devops/pipelines/create-first-pipeline).
-- Azure Resource Manager Service connection to securely authenticate to the service from Azure Pipelines, see [Azure Resource Manager service connection](/azure/devops/pipelines/library/connect-to-azure)
+- An Azure DevOps organization and project. If you don't have an Azure DevOps organization, you can [create one for free](https://learn.microsoft.com/azure/devops/organizations/projects/create-project).
+- A pipeline definition. If you need help with getting started with Azure Pipelines, see [create your first pipeline](https://learn.microsoft.com/azure/devops/pipelines/create-first-pipeline).
+- Azure Resource Manager Service connection to securely authenticate to the service from Azure Pipelines, see [Azure Resource Manager service connection](https://learn.microsoft.com/azure/devops/pipelines/library/connect-to-azure)
 
 ---
 
@@ -167,7 +167,7 @@ The service offers two authentication methods: Microsoft Entra ID and Access Tok
 
   ##### Create GitHub secrets
 
-  -  Add the values you got in the previous step as secrets to your GitHub repository. See [set up GitHub Action Secret](/azure/developer/github/connect-from-azure-openid-connect?branch=main#create-github-secrets). These variables are used in the GitHub Action workflow in subsequent steps. 
+  -  Add the values you got in the previous step as secrets to your GitHub repository. See [set up GitHub Action Secret](https://learn.microsoft.com/azure/developer/github/connect-from-azure-openid-connect?branch=main#create-github-secrets). These variables are used in the GitHub Action workflow in subsequent steps. 
 
   | GitHub Secret       | Source (Microsoft Entra Application or Managed Identity) |
   |---------------------|----------------------------------------------------------|
@@ -182,7 +182,7 @@ The service offers two authentication methods: Microsoft Entra ID and Access Tok
 
   If you're using Azure Pipelines, you can connect to the service using Service Connections. Follow the steps to set up the integration:
 
-  - [Create an app registration with workload identity federation](/azure/devops/pipelines/library/connect-to-azure#create-an-app-registration-with-workload-identity-federation-automatic). Select the subscription and resource group associated with your Playwright workspace. Typically, the resource group has the same name as the Playwright workspace.
+  - [Create an app registration with workload identity federation](https://learn.microsoft.com/azure/devops/pipelines/library/connect-to-azure#create-an-app-registration-with-workload-identity-federation-automatic). Select the subscription and resource group associated with your Playwright workspace. Typically, the resource group has the same name as the Playwright workspace.
 
   - Use this service connection in Azure Pipeline yaml file as shown in subsequent steps.  
 

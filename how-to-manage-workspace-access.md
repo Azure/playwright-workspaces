@@ -8,14 +8,14 @@ ms.custom: playwright-workspaces-preview
 
 # Manage access to a workspace in Playwright Workspaces Preview
 
-In this article, you learn how to manage access to a workspace in Playwright Workspaces Preview. The service uses [Azure role-based access control](/azure/role-based-access-control/overview) (Azure RBAC) to authorize access rights to your workspace. Role assignments are the way you control access to resources using Azure RBAC.
+In this article, you learn how to manage access to a workspace in Playwright Workspaces Preview. The service uses [Azure role-based access control](https://learn.microsoft.com/azure/role-based-access-control/overview) (Azure RBAC) to authorize access rights to your workspace. Role assignments are the way you control access to resources using Azure RBAC.
 
 > [!IMPORTANT]
 > Playwright Workspaces is currently in preview. For legal terms that apply to Azure features that are in beta, in preview, or otherwise not yet released into general availability, see the [Supplemental Terms of Use for Microsoft Azure Previews](https://azure.microsoft.com/support/legal/preview-supplemental-terms/).
 
 ## Prerequisites
 
-- To assign roles in Azure, your account needs the [User Access Administrator](/azure/role-based-access-control/built-in-roles#user-access-administrator), [Owner](/azure/role-based-access-control/built-in-roles#owner), or one of the [classic administrator roles](/azure/role-based-access-control/rbac-and-directory-admin-roles#classic-subscription-administrator-roles).
+- To assign roles in Azure, your account needs the [User Access Administrator](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#user-access-administrator), [Owner](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#owner), or one of the [classic administrator roles](https://learn.microsoft.com/azure/role-based-access-control/rbac-and-directory-admin-roles#classic-subscription-administrator-roles).
 
     To verify your permissions in the Azure portal:
 
@@ -33,7 +33,7 @@ Playwright workspaces uses three Azure built-in roles. To grant users access to 
 | **Owner** | - Full access to manage the workspace in the Azure portal, including assigning roles in Azure RBAC.<br/>- Full access to the workspace in the Azure portal.<br/>- [Create and delete their access tokens](./how-to-manage-access-tokens.md).<br/>- Run Playwright tests on the service. |
 
 > [!IMPORTANT]
-> Before you assign an Azure RBAC role, determine the scope of access that is needed. Best practices dictate that it's always best to grant only the narrowest possible scope. Azure RBAC roles defined at a broader scope are inherited by the resources beneath them. For more information about scope for Azure RBAC role assignments, see [Understand scope for Azure RBAC](/azure/role-based-access-control/scope-overview).
+> Before you assign an Azure RBAC role, determine the scope of access that is needed. Best practices dictate that it's always best to grant only the narrowest possible scope. Azure RBAC roles defined at a broader scope are inherited by the resources beneath them. For more information about scope for Azure RBAC role assignments, see [Understand scope for Azure RBAC](https://learn.microsoft.com/azure/role-based-access-control/scope-overview).
 
 ## Grant access to a user
 
@@ -63,7 +63,7 @@ You can grant a user access to a Playwright workspace by using the Azure portal:
 
 1. Select **Review + assign** to assign the role.
 
-    For more information about how to assign roles, see [Assign Azure roles using the Azure portal](/azure/role-based-access-control/role-assignments-portal).
+    For more information about how to assign roles, see [Assign Azure roles using the Azure portal](https://learn.microsoft.com/azure/role-based-access-control/role-assignments-portal).
 
 ## Revoke access for a user
 
@@ -79,7 +79,7 @@ You can revoke a user's access to a Playwright workspace using the Azure portal:
 
 1. Select **Yes** in the confirmation window to remove the role assignment.
 
-    For more information about how to remove role assignments, see [Remove Azure role assignments](/azure/role-based-access-control/role-assignments-remove).
+    For more information about how to remove role assignments, see [Remove Azure role assignments](https://learn.microsoft.com/azure/role-based-access-control/role-assignments-remove).
 
 <a name='optional-use-azure-ad-security-groups-to-manage-workspace-access'></a>
 
@@ -89,25 +89,25 @@ Instead of granting or revoking access to individual users, you can manage acces
 
 - Avoid the need for granting team or project leaders the Owner role on the workspace. You can grant them access only to the security group to let them manage access to the workspace.
 - You can organize, manage and revoke users' permissions on a workspace and other resources as a group, without having to manage permissions on a user-by-user basis.
-- Using Microsoft Entra groups helps you to avoid reaching the [subscription limit](/azure/role-based-access-control/troubleshooting#limits) on role assignments.
+- Using Microsoft Entra groups helps you to avoid reaching the [subscription limit](https://learn.microsoft.com/azure/role-based-access-control/troubleshooting#limits) on role assignments.
 
 To use Microsoft Entra security groups:
 
-1. [Create a security group](/azure/active-directory/fundamentals/active-directory-groups-create-azure-portal).
+1. [Create a security group](https://learn.microsoft.com/azure/active-directory/fundamentals/active-directory-groups-create-azure-portal).
 
-1. [Add a group owner](/azure/active-directory/fundamentals/active-directory-accessmanagement-managing-group-owners). This user has permissions to add or remove group members. The group owner isn't required to be group member, or have direct RBAC role on the workspace.
+1. [Add a group owner](https://learn.microsoft.com/azure/active-directory/fundamentals/active-directory-accessmanagement-managing-group-owners). This user has permissions to add or remove group members. The group owner isn't required to be group member, or have direct RBAC role on the workspace.
 
 1. Assign the group an RBAC role on the workspace, such as Reader or Contributor.
 
-1. [Add group members](/azure/active-directory/fundamentals/active-directory-groups-members-azure-portal). The added members can now access to the workspace.
+1. [Add group members](https://learn.microsoft.com/azure/active-directory/fundamentals/active-directory-groups-members-azure-portal). The added members can now access to the workspace.
 
 ## Create a custom role for restricted tenants
 
-If you're using Microsoft Entra [tenant restrictions](/azure/active-directory/external-identities/tenant-restrictions-v2) and users with temporary access, you can create a custom role in Azure RBAC to manage permissions and grant access to run tests.
+If you're using Microsoft Entra [tenant restrictions](https://learn.microsoft.com/azure/active-directory/external-identities/tenant-restrictions-v2) and users with temporary access, you can create a custom role in Azure RBAC to manage permissions and grant access to run tests.
 
 Perform the following steps to manage permissions with a custom role:
 
-1. Follow these steps to [create an Azure custom role](/azure/role-based-access-control/custom-roles-portal).
+1. Follow these steps to [create an Azure custom role](https://learn.microsoft.com/azure/role-based-access-control/custom-roles-portal).
 
 1. Select **Add permissions**, and enter *Playwright* in the search box, and then select **Microsoft.AzurePlaywrightService**.
 
@@ -115,7 +115,7 @@ Perform the following steps to manage permissions with a custom role:
 
     ![Screenshot that shows the list of permissions for adding to the custom role in the Azure portal, highlighting the permission record to add.](media/how-to-manage-workspace-access/custom-role-permissions.png)
 
-1. Follow these steps to [add a role assignment](/azure/role-based-access-control/role-assignments-portal) for the custom role to the user account.
+1. Follow these steps to [add a role assignment](https://learn.microsoft.com/azure/role-based-access-control/role-assignments-portal) for the custom role to the user account.
 
     The user can now continue to run tests in the workspace.
 
@@ -125,7 +125,7 @@ Here are a few things to be aware of while you use Azure role-based access contr
 
 - When you create a resource in Azure, such as a workspace, you are not automatically the owner of the resource. Your role is inherited from the highest scope role that you're authorized against in that subscription. As an example, if you're a Contributor for the subscription, you have the permissions to create a Playwright workspace. However, you would be assigned the Contributor role against that workspace, and not the Owner role.
 
-- When there are two role assignments to the same Microsoft Entra user with conflicting sections of Actions/NotActions, your operations listed in NotActions from one role might not take effect if they're also listed as Actions in another role. To learn more about how Azure parses role assignments, read [How Azure RBAC determines if a user has access to a resource](/azure/role-based-access-control/overview#how-azure-rbac-determines-if-a-user-has-access-to-a-resource).
+- When there are two role assignments to the same Microsoft Entra user with conflicting sections of Actions/NotActions, your operations listed in NotActions from one role might not take effect if they're also listed as Actions in another role. To learn more about how Azure parses role assignments, read [How Azure RBAC determines if a user has access to a resource](https://learn.microsoft.com/en-us/azure/role-based-access-control/overview#how-azure-rbac-determines-if-a-user-has-access-to-a-resource).
 
 - It can sometimes take up to 1 hour for your new role assignments to take effect over cached permissions.
 
