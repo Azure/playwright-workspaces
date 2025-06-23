@@ -85,16 +85,6 @@ Update the `package.json` file in your repository to add details about Playwrigh
 }
 ```
 
-## Enable artifacts in Playwright configuration 
-
-In the `playwright.config.ts` file of your project, make sure you're collecting all the required artifacts.
-```typescript
-  use: {
-    trace: 'on-first-retry',
-    video:'retain-on-failure',
-    screenshot:'on'
-  },
-  ```
 ::: zone-end
 
 ::: zone pivot="nunit-test-runner"
@@ -139,19 +129,11 @@ If you haven't configured your Playwright tests yet for running them with servic
 
 3. Save and commit the file to your source code repository.
 
-## Enable artifacts in your Playwright setup 
-
-Set up Playwright to capture artifacts such as screenshot, videos and traces. 
-- For screenshots, see [capture screenshots](https://playwright.dev/dotnet/docs/screenshots#introduction)
-- For videos, see [record videos for your tests](https://playwright.dev/dotnet/docs/videos#introduction)
-- For traces, see [recording a trace](https://playwright.dev/dotnet/docs/trace-viewer-intro#recording-a-trace)
-
-Once you collect these artifacts, attach them to the `TestContext` to ensure they're available in your test reports. For more information, see our [sample project for NUnit](https://aka.ms/mpt/nunit-sample).
 ::: zone-end
 
 ## Set up authentication
     
-The CI machine running Playwright tests must authenticate with Playwright Workspaces service to get the browsers to run the tests and to publish the test results and artifacts. 
+The CI machine running Playwright tests must authenticate with Playwright Workspaces service to get the browsers to run the tests. 
 
 The service offers two authentication methods: Microsoft Entra ID and Access Tokens. We strongly recommend using Microsoft Entra ID to authenticate your pipelines. 
 
@@ -441,13 +423,13 @@ Update the CI workflow definition to run your Playwright tests with the Playwrig
 
 3. Save and commit your changes.
 
-    When the CI workflow is triggered, your Playwright tests run in your Playwright workspace on cloud-hosted browsers, across 20 parallel workers. The results and artifacts collected are published to the service and can be viewed on service portal.
+    When the CI workflow is triggered, your Playwright tests run in your Playwright workspace on cloud-hosted browsers, across 20 parallel workers. The results are published to the service and can be viewed in the Azure portal.
 
 
 The settings for your test run can be defined in `.runsettings` file. For more information, see [how to use service package options](./how-to-use-service-config-file.md#config-options-in-runsettings-file)
 
 > [!CAUTION]
-> With Playwright Workspaces, you get charged based on the number of total test minutes consumed. If you're a first-time user or [getting started with a free trial](./how-to-try-playwright-workspaces-free.md), you might start with running a single test at scale instead of your full test suite to avoid exhausting your free test minutes and test results.
+> With Playwright Workspaces, you get charged based on the number of total test minutes consumed. If you're a first-time user or [getting started with a free trial](./how-to-try-playwright-workspaces-free.md), you might start with running a single test at scale instead of your full test suite to avoid exhausting your free test minutes.
 
 After you validate that the test runs successfully, you can gradually increase the test load by running more tests with the service.
 

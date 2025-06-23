@@ -46,7 +46,7 @@ To get started with running your Playwright tests on cloud browsers, you first n
     |**Subscription**     | Select the Azure subscription that you want to use for this Playwright workspace. |
     |**Resource group**     | Select an existing resource group. Or select **Create new**, and then enter a unique name for the new resource group.        |
     |**Name**     | Enter a unique name to identify your workspace.<BR>The name can only consist of alphanumerical characters, and have a length between 3 and 64 characters. |
-    |**Location**     | Select a geographic location to host your workspace. <BR>This location also determines where the test execution results and related artifacts are stored. |
+    |**Location**     | Select a geographic location to host your workspace. <BR>This location also determines where the test execution results are stored. |
 
     > [!NOTE]
     > Optionally, you can configure more details on the **Tags** tab. Tags are name/value pairs that enable you to categorize resources and view consolidated billing by applying the same tag to multiple resources and resource groups.
@@ -331,13 +331,6 @@ Passed!  - Failed:     0, Passed:     100, Skipped:     0, Total:     100, Durat
 Workload updates are available. Run `dotnet workload list` for more information.
 ```
 ::: zone-end
-
-
-> [!TIP]
-> You can use Playwright Workspaces features independently. You can publish test results to the portal without using the cloud-hosted browsers feature and you can also use only cloud-hosted browsers to expedite your test suite without publishing test results. 
-
-> [!NOTE]
-> The test results and artifacts that you publish are retained on the service for 90 days. After that, they are automatically deleted.  
 
 ## Optimize parallel worker configuration
 

@@ -93,7 +93,7 @@ To get started with running your Playwright tests on cloud browsers, you first n
     |**Subscription**     | Select the Azure subscription that you want to use for this Playwright workspace. |
     |**Resource group**     | Select an existing resource group. Or select **Create new**, and then enter a unique name for the new resource group.        |
     |**Name**     | Enter a unique name to identify your workspace.<BR>The name can only consist of alphanumerical characters, and have a length between 3 and 64 characters. |
-    |**Location**     | Select a geographic location to host your workspace. <BR>This location also determines where the test execution results and related artifacts are stored. |
+    |**Location**     | Select a geographic location to host your workspace. <BR>This location also determines where the test execution results are stored. |
 
     > [!NOTE]
     > Optionally, you can configure more details on the **Tags** tab. Tags are name/value pairs that enable you to categorize resources and view consolidated billing by applying the same tag to multiple resources and resource groups.
@@ -164,17 +164,6 @@ az login
 > [!NOTE]
 > If you're a part of multiple Microsoft Entra tenants, make sure you sign in to the tenant where your workspace belongs. You can get the tenant ID from Azure portal. See [Find your Microsoft Entra Tenant](/azure/azure-portal/get-subscription-tenant-id#find-your-microsoft-entra-tenant). Once you get the ID, sign-in using the command `az login --tenant <TenantID>`
 
-
-### Enable artifacts in your Playwright setup
-
-In the `playwright.config.ts` file of your project, ensure you are collecting all the required artifacts.
-```typescript
-  use: {
-    trace: 'on-first-retry',
-    video:'retain-on-failure',
-    screenshot:'on'
-  }
-```
 
 ## Run your tests at scale
 

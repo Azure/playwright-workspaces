@@ -59,7 +59,7 @@ To get started with running your Playwright tests on cloud browsers, you first n
     |**Subscription**     | Select the Azure subscription that you want to use for this Playwright workspace. |
     |**Resource group**     | Select an existing resource group. Or select **Create new**, and then enter a unique name for the new resource group.        |
     |**Name**     | Enter a unique name to identify your workspace.<BR>The name can only consist of alphanumerical characters, and have a length between 3 and 64 characters. |
-    |**Location**     | Select a geographic location to host your workspace. <BR>This location also determines where the test execution results and related artifacts are stored. |
+    |**Location**     | Select a geographic location to host your workspace. |
 
     > [!NOTE]
     > Optionally, you can configure more details on the **Tags** tab. Tags are name/value pairs that enable you to categorize resources and view consolidated billing by applying the same tag to multiple resources and resource groups.
@@ -78,7 +78,7 @@ To get started with running your Playwright tests on cloud browsers, you first n
 
 When you exceed any of the limits of the free trial, your workspace is automatically converted to the pay-as-you-go billing model. 
 
-All test runs, test results, and other artifacts linked to your workspace remain available.
+All test runs linked to your workspace remain available.
 
 ## Next step
 
