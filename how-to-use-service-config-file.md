@@ -36,7 +36,7 @@ If you don't have this file in your code, follow [Quickstart: Run end-to-end tes
 Below is a complete example of a `playwright.service.config.ts` file showing all supported configuration options:
 
 ```typescript
-import { getServiceConfig, ServiceOS } from "@azure/playwright";
+import { getServiceConfig, ServiceOS, ServiceAuth } from "@azure/playwright";
 import { defineConfig } from "@playwright/test";
 import { AzureCliCredential } from "@azure/identity";
 import config from "./playwright.config";
@@ -44,7 +44,7 @@ import config from "./playwright.config";
 export default defineConfig(
   config,
   getServiceConfig(config, {
-    serviceAuthType:'ACCESS_TOKEN' // Use this option if authenticating with access tokens. This mode of authentication must be explicitly enabled in your workspace.
+    serviceAuthType: ServiceAuth.ACCESS_TOKEN // Use this option if authenticating with access tokens. This mode of authentication must be explicitly enabled in your workspace.
     os: ServiceOS.WINDOWS, // Specify the browser's OS your tests will automate.
     runId: new Date().toISOString(), // Set a unique ID for every test run to distinguish them in the service portal.
     credential: new AzureCliCredential(), // Select the authentication method you want to use with Entra.
@@ -61,12 +61,12 @@ export default defineConfig(
 * **`serviceAuthType`**:
     - **Description**: This setting allows you to choose the authentication method you want to use for your test run. 
     - **Available Options**:
-        - `ACCESS_TOKEN` to use access tokens. You need to enable authentication using access tokens if you want to use this option, see [manage authentication](./how-to-manage-authentication.md).
-        - `ENTRA_ID` to use Microsoft Entra ID for authentication. It's the default mode. 
-    - **Default Value**: `ENTRA_ID`
+        - `ServiceAuth.ACCESS_TOKEN` to use access tokens. You need to enable authentication using access tokens if you want to use this option, see [manage authentication](./how-to-manage-authentication.md).
+        - `ServiceAuth.ENTRA_ID` to use Microsoft Entra ID for authentication. It's the default mode. 
+    - **Default Value**: `ServiceAuth.ENTRA_ID`
     - **Example**:
       ```typescript
-      serviceAuthType:'ENTRA_ID'
+      serviceAuthType: ServiceAuth.ENTRA_ID
       ```
 
 
@@ -89,7 +89,7 @@ export default defineConfig(
       ```
 
 * **`credential`**:
-    - **Description**: This setting allows you to select the authentication method you want to use with Microsoft Entra ID.
+    - **Description**: This setting allows you to select the authentication method you want to use with Microsoft Entra ID. You must specify this if `serviceAuthType` is **not** set to `ACCESS_TOKEN`.
     - **Example**:
       ```typescript
       credential: new AzureCliCredential()
@@ -139,8 +139,6 @@ Here's version of the `.runsettings` file with all the available options:
         <Parameter name="ExposeNetwork" value="loopback" />
         <!--Select the authentication method you want to use with Entra-->
         <Parameter name="AzureTokenCredentialType" value="DefaultAzureCredential" />
-        <!--Enable/disable GitHub summary in GitHub Actions workflow.-->
-        <Parameter name="EnableGitHubSummary" value="false" />
     </TestRunParameters>
   <!-- NUnit adapter -->  
   <NUnit>

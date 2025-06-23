@@ -30,13 +30,14 @@ You can configure the `exposeNetwork` option in `playwright.service.config.ts`. 
 ```typescript
 import { getServiceConfig, ServiceOS } from "@azure/playwright";
 import { defineConfig } from "@playwright/test";
-import { AzureCliCredential } from "@azure/identity";
+import { DefaultAzureCredential } from "@azure/identity";
 import config from "./playwright.config";
 
 export default defineConfig(
   config,
   getServiceConfig(config, {
     exposeNetwork: '<loopback>', // Allow service to access the localhost.
+    credential: new DefaultAzureCredential()
   }),
 );
 

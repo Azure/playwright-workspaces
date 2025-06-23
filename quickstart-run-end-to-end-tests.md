@@ -83,7 +83,7 @@ If you already have this file, the package asks you to overwrite it.
 To use the service, install the Playwright Workspaces package. 
 
 ```PowerShell
-dotnet add package Azure.Developer.MicrosoftPlaywrightTesting.NUnit --prerelease
+dotnet add package Azure.Developer.Playwright.NUnit --prerelease
 ```
 
 ::: zone-end
@@ -136,12 +136,19 @@ We recommend that you use the `dotenv` module to manage your environment. With `
 Create a file `PlaywrightServiceSetup.cs` in your project with the following content. 
 
 ```csharp
-using Azure.Developer.MicrosoftPlaywrightTesting.NUnit;
+using Azure.Developer.Playwright.NUnit;
+using Azure.Identity;
 
 namespace PlaywrightTests; // Remember to change this as per your project namespace
 
 [SetUpFixture]
-public class PlaywrightServiceSetup : PlaywrightServiceNUnit {};
+public class PlaywrightServiceNUnitSetup  : PlaywrightServiceBrowserNUnit
+{
+    public PlaywrightServiceNUnitSetup() : base(
+        credential: new DefaultAzureCredential()
+    ) 
+    {}
+}
 ```
 
 > [!NOTE]

@@ -81,7 +81,7 @@ Update the `package.json` file in your repository to add details about Playwrigh
 
 ```typescript
 "devDependencies": {
-    "@azure/playwright": "^1.0.0-beta.6"
+    "@azure/playwright": "beta"
 }
 ```
 
@@ -112,14 +112,14 @@ In the `playwright.config.ts` file of your project, make sure you're collecting 
 In your project, install Playwright Workspaces package. 
 
 ```PowerShell
-dotnet add package Azure.Developer.MicrosoftPlaywrightTesting.NUnit --prerelease
+dotnet add package Azure.Developer.Playwright.NUnit --prerelease
 ```
 
 This command updates your project's `csproj` file by adding the service package details to the `ItemGroup` section. Remember to commit these changes.
 
 ```xml
   <ItemGroup>
-    <PackageReference Include="Azure.Developer.MicrosoftPlaywrightTesting.NUnit" Version="1.0.0-beta.2" />
+    <PackageReference Include="Azure.Developer.Playwright.NUnit" Version="1.0.0-beta.1" />
   </ItemGroup>
 ```
 
