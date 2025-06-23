@@ -26,17 +26,16 @@ The following table lists the limits for the Playwright Workspaces free trial.
 |-|-|
 | Duration of trial | 30 days |
 | Total test minutes¹ | 100 minutes |
-| Total test results¹ | 1,000 results |
 | Number of workspaces²³ | 1 |
 
-¹ If your usage exceeds either the free test minute limit or the free test result limit, only the overage counts toward the pay-as-you-go billing model. The two features are billed separately. See [Playwright Workspaces preview pricing](https://aka.ms/mpt/pricing)
+¹ If your usage exceeds the free test minute limit, only the overage counts toward the pay-as-you-go billing model. See [Playwright Workspaces preview pricing](https://aka.ms/pww/pricing)
 
 ² These limits only apply to the *first* workspace you create in your Azure subscription. Any subsequent workspaces you create in the subscription automatically uses the pay-as-you-go billing model.
 
 ³ If you delete the free trial workspace, you can't create a new free trial workspace anymore.
 
 > [!CAUTION]
-> If you exceed any of these limits, the workspace is automatically converted to the pay-as-you-go billing model. Learn more about the [Playwright Workspaces pricing](https://aka.ms/mpt/pricing).
+> If you exceed any of these limits, the workspace is automatically converted to the pay-as-you-go billing model. Learn more about the [Playwright Workspaces pricing](https://aka.ms/pww/pricing).
 
 ## Create a workspace
 

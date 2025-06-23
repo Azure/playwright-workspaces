@@ -12,6 +12,7 @@ Get started with [Quickstart: run your Playwright tests at scale with Playwright
 ### Overview
 - [What is Playwright Workspaces?](overview-what-is-microsoft-playwright-workspaces.md)
 - [Try Playwright Workspaces for free](how-to-try-playwright-workspaces-free.md)
+- [Pricing](pricing.md)
 
 ## Get started
 
