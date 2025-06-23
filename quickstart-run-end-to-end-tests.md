@@ -320,10 +320,8 @@ To run your Playwright test suite in Visual Studio Code with Playwright Workspac
 Run Playwright tests against browsers managed by the service using the configuration you created above. 
 
 ```bash
-dotnet test --settings:.runsettings -- NUnit.NumberOfTestWorkers=20
+dotnet test -- NUnit.NumberOfTestWorkers=20
 ```
-
-The settings for your test run are defined in `.runsettings` file. See [how to use service package options](./how-to-use-service-config-file.md#config-options-in-runsettings-file)
 
 After the test run completes, you can view the test status in the terminal.
 

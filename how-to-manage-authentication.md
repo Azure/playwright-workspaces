@@ -64,13 +64,31 @@ To enable authentication using access tokens:
 
 ::: zone pivot="nunit-test-runner"
 
-1. While running the tests, enable access token auth in the `.runsettings` file in your setup. 
+1. While running the tests, enable access token auth in the setup file. 
 
-    ```xml
-    <TestRunParameters>
-        <!-- Use this option when you want to authenticate using access tokens. This mode of auth should be enabled for the workspace. -->
-         <Parameter name="ServiceAuthType" value="AccessToken" />
-    </TestRunParameters>
+    ```c#
+    using Azure.Developer.Playwright.NUnit;
+    using Azure.Developer.Playwright;
+    using Azure.Identity;
+    using System.Runtime.InteropServices;
+    using System;
+
+    namespace PlaywrightService.SampleTests; // Remember to change this as per your project namespace
+
+    [SetUpFixture]
+    public class PlaywrightServiceNUnitSetup : PlaywrightServiceBrowserNUnit
+    {
+        public PlaywrightServiceNUnitSetup() : base(
+            credential: new ManagedIdentityCredential(),
+            options: new PlaywrightServiceBrowserClientOptions()
+            {
+                
+            }
+        )
+        {
+            // no-op
+        }
+    }
     ```
 ::: zone-end
 
@@ -122,7 +140,7 @@ npx playwright test --config=playwright.service.config.ts --workers=20
 
 ::: zone pivot="nunit-test-runner"
 ```bash
-dotnet test --settings:.runsettings -- NUnit.NumberOfTestWorkers=20
+dotnet test -- NUnit.NumberOfTestWorkers=20
 ```
 ::: zone-end
 ## Related content

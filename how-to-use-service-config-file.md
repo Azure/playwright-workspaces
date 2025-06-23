@@ -121,101 +121,64 @@ export default defineConfig(
 ::: zone pivot="nunit-test-runner"
 
 
-Here's version of the `.runsettings` file with all the available options:
+Here's version of the setup file with all the available options:
 
-```xml
-﻿<?xml version="1.0" encoding="utf-8"?>
-<RunSettings>
-    <TestRunParameters>
-        <!-- Use this option when you want to authenticate using access tokens. This mode of auth should be enabled for the workspace. -->
-         <Parameter name="ServiceAuthType" value="EntraId" />
-        <!-- Select the operating system where you want to run tests. -->
-        <Parameter name="Os" value="linux" />
-        <!-- Set a unique ID for every test run to distinguish them in the service portal.-->
-        <Parameter name="RunId" value="sample-run-id1" />
-        <!--Select if you want to use cloud-hosted browsers to run your Playwright tests.-->
-        <Parameter name="UseCloudHostedBrowsers" value="true" />
-        <!--Use this option to connect to local resources from your Playwright test code without having to configure additional firewall-->
-        <Parameter name="ExposeNetwork" value="loopback" />
-        <!--Select the authentication method you want to use with Entra-->
-        <Parameter name="AzureTokenCredentialType" value="DefaultAzureCredential" />
-    </TestRunParameters>
-  <!-- NUnit adapter -->  
-  <NUnit>
-    <!-- Adjust parallel workers, parallel worker would also be bound by number of unit test files -->
-    <NumberOfTestWorkers>10</NumberOfTestWorkers>
-  </NUnit>
-  <!-- General run configuration -->
-  <RunConfiguration>
-    <EnvironmentVariables>
-      <!-- For debugging selectors, it's recommend to set the following environment variable -->
-      <DEBUG>pw:api</DEBUG>
-    </EnvironmentVariables>
-  </RunConfiguration>
-  <!-- Playwright -->  
-  <Playwright>
-    <BrowserName>chromium</BrowserName>
-    <!--Set the timeout for your tests.-->
-    <ExpectTimeout>5000</ExpectTimeout>
-    <LaunchOptions>
-      <Headless>false</Headless>
-      <!--Channel>msedge</Channel-->
-    </LaunchOptions>
-  </Playwright>
-</RunSettings>
+```c#
+using Azure.Developer.Playwright.NUnit;
+using Azure.Developer.Playwright;
+using Azure.Identity;
+using System.Runtime.InteropServices;
+using System;
 
+namespace PlaywrightService.SampleTests; // Remember to change this as per your project namespace
+
+[SetUpFixture]
+public class PlaywrightServiceNUnitSetup : PlaywrightServiceBrowserNUnit
+{
+    public PlaywrightServiceNUnitSetup() : base(
+        credential: new ManagedIdentityCredential(), // Select the authentication method you want to use with Entra.
+        options: new PlaywrightServiceBrowserClientOptions()
+        {
+            UseCloudHostedBrowsers = true, // Choose whether to use cloud-hosted browsers or the browsers on your client machine.
+            OS = OSPlatform.Linux, // Specify the browser's OS your tests will automate.
+            ExposeNetwork = "<loopback>", // Allows cloud browsers to access local resources from your Playwright test code without additional firewall config.
+            RunId = Guid.NewGuid().ToString(), // Set a unique ID for every test run to distinguish them in the service portal.
+            ServiceAuth = ServiceAuthType.EntraId // Use this option if authenticating with access tokens. This mode of authentication must be explicitly enabled in your workspace.
+        }
+    )
+    {
+        // no-op
+    }
+}
 ```
 
-## Config options in `.runsettings` file
+## Config options in the setup file
 
-* **`serviceAuthType`**:
+* **`ServiceAuth`**:
     - **Description**: This setting allows you to choose the authentication method you want to use for your test run. 
     - **Available Options**:
-        - `AccessToken` to use access tokens. You need to enable authentication using access tokens if you want to use this option, see [manage authentication](./how-to-manage-authentication.md).
-        - `EntraId` to use Microsoft Entra ID for authentication. It's the default mode. 
-    - **Default Value**: `EntraId`
-    - **Example**:
-      ```xml
-      <Parameter name="ServiceAuthType" value="EntraId" />
-      ```
+        - `ServiceAuthType.AccessToken` to use access tokens. You need to enable authentication using access tokens if you want to use this option, see [manage authentication](./how-to-manage-authentication.md).
+        - `ServiceAuthType.EntraId` to use Microsoft Entra ID for authentication. It's the default mode. 
+    - **Default Value**: `ServiceAuthType.EntraId`
 
-* **`os`**:
+* **`OS`**:
     - **Description**: This setting allows you to choose the operating system where the browsers running Playwright tests are hosted.
     - **Available Options**:
-        - "windows" for Windows OS.
-        - "linux" for Linux OS.
-    - **Default Value**: "linux"
-    - **Example**:
-      ```xml
-      <Parameter name="Os" value="linux" />
-      ```
+        - `OSPlatform.Windows` for Windows OS.
+        - `OSPlatform.Linux` for Linux OS.
+    - **Default Value**: `OSPlatform.Linux`
 
 * **`RunId`**:
     - **Description**: This setting allows you to set a unique ID for every test run to distinguish them in the service portal. Using the same runId for multiple test runs results in error. If you don't set it, the service package will generate a unique ID every time you trigger a test run. For sharding, keep this same across all shards.
-    - **Example**:
-      ```xml
-      <Parameter name="RunId" value="sample-run-id1" />
-      ```
 
-* **`AzureTokenCredentialType`**:
-    - **Description**: This setting allows you to select the authentication method you want to use with Microsoft Entra ID.
-    - **Example**:
-      ```xml
-      <Parameter name="AzureTokenCredentialType" value="DefaultAzureCredential" />
-      ```
+* **`credential`**:
+    - **Description**: This setting allows you to select the authentication method you want to use with Microsoft Entra ID. You must specify this if `ServiceAuth` is **not** set to `ServiceAuthType.AccessToken`.
 
 * **`UseCloudHostedBrowsers`**
     - **Description**: This setting allows you to choose whether to use cloud-hosted browsers or the browsers on your client machine to run your Playwright tests. If you disable this option, your tests run on the browsers of your client machine instead of cloud-hosted browsers, and you don't incur any charges.
     - **Default Value**: true
-    - **Example**:
-      ```xml
-      <Parameter name="UseCloudHostedBrowsers" value="true" />
-      ```   
+
 * **`ExposeNetwork`**
     - **Description**: This setting allows you to connect to local resources from your Playwright test code without having to configure another firewall settings. To learn more, see [how to test local applications](./how-to-test-local-applications.md)
-    - **Example**:
-      ```xml
-      <Parameter name="ExposeNetwork" value="loopback" />
-      ```
       
 ::: zone-end
