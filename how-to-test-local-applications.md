@@ -30,13 +30,14 @@ You can configure the `exposeNetwork` option in `playwright.service.config.ts`. 
 ```typescript
 import { getServiceConfig, ServiceOS } from "@azure/playwright";
 import { defineConfig } from "@playwright/test";
-import { AzureCliCredential } from "@azure/identity";
+import { DefaultAzureCredential } from "@azure/identity";
 import config from "./playwright.config";
 
 export default defineConfig(
   config,
   getServiceConfig(config, {
     exposeNetwork: '<loopback>', // Allow service to access the localhost.
+    credential: new DefaultAzureCredential()
   }),
 );
 
@@ -52,19 +53,37 @@ npx playwright test --config=playwright.service.config.ts --workers=20
 
 ::: zone pivot="nunit-test-runner"
 
-You can configure the `ExposeNetwork` option in `.runsettings`. The following example shows how to expose the `localhost` network by using the [`<loopback>`](https://en.wikipedia.org/wiki/Loopback) rule. You can also replace `localhost` with a domain that you want to enable for the service. 
+You can configure the `ExposeNetwork` option in the setup file. The following example shows how to expose the `localhost` network by using the [`<loopback>`](https://en.wikipedia.org/wiki/Loopback) rule. You can also replace `localhost` with a domain that you want to enable for the service. 
 
-```xml
-    <TestRunParameters>
-        <!--Use this option to connect to local resources from your Playwright test code without having to configure additional firewall-->
-        <Parameter name="ExposeNetwork" value="loopback" />
-    </TestRunParameters>
+```c#
+using Azure.Developer.Playwright.NUnit;
+using Azure.Developer.Playwright;
+using Azure.Identity;
+using System.Runtime.InteropServices;
+using System;
+
+namespace PlaywrightService.SampleTests; // Remember to change this as per your project namespace
+
+[SetUpFixture]
+public class PlaywrightServiceNUnitSetup : PlaywrightServiceBrowserNUnit
+{
+    public PlaywrightServiceNUnitSetup() : base(
+        credential: new ManagedIdentityCredential(),
+        options: new PlaywrightServiceBrowserClientOptions()
+        {
+            ExposeNetwork = "<loopback>"
+        }
+    )
+    {
+        // no-op
+    }
+}
 ```
 
 You can now reference `localhost` in the Playwright test code, and run the tests on cloud-hosted browsers with Playwright Workspaces:
 
 ```bash
-dotnet test --settings:.runsettings -- NUnit.NumberOfTestWorkers=20
+dotnet test -- NUnit.NumberOfTestWorkers=20
 ```
 
 ::: zone-end

@@ -45,6 +45,7 @@ Example service config that runs visual comparisons and configures the path for 
 ```typeScript
 import { defineConfig } from '@playwright/test';
 import { getServiceConfig, ServiceOS } from '@azure/playwright';
+import { DefaultAzureCredential } from '@azure/identity';
 import config from './playwright.config';
 
 /* Learn more about service configuration at https://aka.ms/mpt/config */
@@ -53,7 +54,8 @@ export default defineConfig(
   getServiceConfig(config, {
     exposeNetwork: '<loopback>',
     timeout: 30000,
-    os: ServiceOS.LINUX
+    os: ServiceOS.LINUX,
+    credential: new DefaultAzureCredential()
   }),
   {
     ignoreSnapshots: false,

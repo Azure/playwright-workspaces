@@ -81,51 +81,54 @@ Update the `package.json` file in your repository to add details about Playwrigh
 
 ```typescript
 "devDependencies": {
-    "@azure/playwright": "^1.0.0-beta.6"
+    "@azure/playwright": "beta"
 }
 ```
 
 ::: zone-end
 
 ::: zone pivot="nunit-test-runner"
-## Set up service configuration 
-
-1. Create a new file `PlaywrightServiceSetup.cs` in the root directory of your project. This file facilitates authentication of your client with the service. 
-2. Add the following content to it:
-
-    :::code language="csharp" source="~/playwright-testing-service/samples/.NET/NUnit/PlaywrightServiceSetup.cs":::
-
-3. Save and commit the file to your source code repository.
 
 ## Install service package
 
 In your project, install Playwright Workspaces package. 
 
 ```PowerShell
-dotnet add package Azure.Developer.MicrosoftPlaywrightTesting.NUnit --prerelease
+dotnet add package Azure.Developer.Playwright.NUnit --prerelease
 ```
 
 This command updates your project's `csproj` file by adding the service package details to the `ItemGroup` section. Remember to commit these changes.
 
 ```xml
   <ItemGroup>
-    <PackageReference Include="Azure.Developer.MicrosoftPlaywrightTesting.NUnit" Version="1.0.0-beta.2" />
+    <PackageReference Include="Azure.Developer.Playwright.NUnit" Version="1.0.0-beta.1" />
   </ItemGroup>
 ```
 
-## Add or update `.runsettings` file for your project. 
+## Set up service configuration 
 
-If you haven't configured your Playwright tests yet for running them with service, add `.runsettings` file to your repository. In the next step, you then specify this service configuration file on the Playwright CLI.
-
-1. Create a new `.runsettings` file.
-
-    Optionally, use the `.runsettings` file in the [sample repository](https://aka.ms/mpt/nunit-runsettings).
-
+1. Create a new file `PlaywrightServiceNUnitSetup.cs` in the root directory of your project. This file facilitates authentication of your client with the service. 
 2. Add the following content to it:
 
-    :::code language="xml" source="~/playwright-testing-service/samples/.NET/NUnit/.runsettings":::
+```c#
+using Azure.Developer.Playwright.NUnit;
+using Azure.Identity;
+using System.Runtime.InteropServices;
+using System;
 
-   The settings in this file enable you to accelerate build pipelines by running tests in parallel using cloud-hosted browsers.
+namespace PlaywrightService.SampleTests; // Remember to change this as per your project namespace
+
+[SetUpFixture]
+public class PlaywrightServiceNUnitSetup : PlaywrightServiceBrowserNUnit
+{
+    public PlaywrightServiceNUnitSetup() : base(
+        credential: new DefaultAzureCredential(),
+    )
+    {
+        // no-op
+    }
+}
+```
 
 3. Save and commit the file to your source code repository.
 
@@ -309,7 +312,7 @@ Update the CI workflow definition to run your Playwright tests with the Playwrig
 
 ::: zone pivot="nunit-test-runner"
 
-Update the CI workflow definition to run your Playwright tests with the Playwright NUnit CLI. Pass the `.runsettings` file as an input parameter for the Playwright CLI. You configure your environment by specifying environment variables.
+Update the CI workflow definition to run your Playwright tests with the Playwright NUnit CLI. You configure your environment by specifying environment variables.
 
 1. Open the CI workflow definition.
 
@@ -364,7 +367,7 @@ Update the CI workflow definition to run your Playwright tests with the Playwrig
               # Regional endpoint for Playwright Workspaces
               PLAYWRIGHT_SERVICE_URL: ${{ secrets.PLAYWRIGHT_SERVICE_URL }}
               # PLAYWRIGHT_SERVICE_ACCESS_TOKEN: ${{ secrets.PLAYWRIGHT_SERVICE_ACCESS_TOKEN }} # Not recommended, use Microsoft Entra ID authentication. 
-            run: dotnet test --settings:.runsettings -- NUnit.NumberOfTestWorkers=20
+            run: dotnet test -- NUnit.NumberOfTestWorkers=20
 
           - name: Upload Playwright report
             uses: actions/upload-artifact@v3
@@ -405,7 +408,7 @@ Update the CI workflow definition to run your Playwright tests with the Playwrig
         scriptType: 'pscore'
         scriptLocation: 'inlineScript'
         inlineScript: |
-          dotnet test --settings:.runsettings -- NUnit.NumberOfTestWorkers=20
+          dotnet test -- NUnit.NumberOfTestWorkers=20
       addSpnToEnvironment: true
       workingDirectory: path/to/playwright/folder # update accordingly
 
@@ -425,8 +428,6 @@ Update the CI workflow definition to run your Playwright tests with the Playwrig
 
     When the CI workflow is triggered, your Playwright tests run in your Playwright workspace on cloud-hosted browsers, across 20 parallel workers. The results are published to the service and can be viewed in the Azure portal.
 
-
-The settings for your test run can be defined in `.runsettings` file. For more information, see [how to use service package options](./how-to-use-service-config-file.md#config-options-in-runsettings-file)
 
 > [!CAUTION]
 > With Playwright Workspaces, you get charged based on the number of total test minutes consumed. If you're a first-time user or [getting started with a free trial](./how-to-try-playwright-workspaces-free.md), you might start with running a single test at scale instead of your full test suite to avoid exhausting your free test minutes.
