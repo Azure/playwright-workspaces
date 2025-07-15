@@ -1,4 +1,4 @@
-# Example Playwright Project with Service Workspace
+# Example Playwright Library Project with Service Workspace
 # How to use this example
 - Clone the repo and go to the folder
 - npm install
