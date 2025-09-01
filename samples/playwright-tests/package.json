@@ -9,7 +9,7 @@
   "license": "ISC",
   "devDependencies": {
     "@azure/identity": "^4.10.2",
-    "@azure/playwright": "latest",
+    "@azure/playwright": "^1.0.0",
     "@playwright/test": "^1.53.0"
   }
 }
