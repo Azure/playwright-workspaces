@@ -1,0 +1,17 @@
+# Core testing dependencies
+pytest==8.4.2
+pytest-playwright==0.7.1
+
+# Additional pytest plugins
+pytest-html==4.1.1
+pytest-xdist==3.6.0
+pytest-asyncio==1.2.0
+
+# Playwright (using newer version with pre-built wheels)
+playwright==1.55.0
+
+# For API testing examples
+requests==2.32.3
+
+# Environment variable management
+python-dotenv==1.0.0
