@@ -1,0 +1,8 @@
+		"playwright": {
+			"command": "npx",
+			"args": [
+				"@playwright/mcp@0.0.35", // dont use latest, as it uses unreleased playwright
+				"--config=./config.json"
+			],
+			"type": "stdio"
+		},
