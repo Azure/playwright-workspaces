@@ -1,0 +1,8 @@
+{
+    "browser": {
+        "launchOptions": {
+            "headless": true
+        },
+    "remoteEndpoint": "wss://__Region__.api.playwright.microsoft.com/playwrightworkspaces/__workspaceId__/browsers?os=LINUX&api-version=2025-09-01&accessKey=__access_token__"
+    }
+}
