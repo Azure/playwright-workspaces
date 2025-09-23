@@ -1,7 +1,9 @@
 import { defineConfig } from '@playwright/test';
 import { createAzurePlaywrightConfig, ServiceOS } from '@azure/playwright';
-import { DefaultAzureCredential } from '@azure/identity';
+import { DefaultAzureCredential, AzureCliCredential } from '@azure/identity';
 import config from './playwright.config';
+
+const os = ServiceOS.LINUX;
 
 /* Learn more about service configuration at https://aka.ms/pww/docs/config */
 export default defineConfig(
@@ -9,7 +11,11 @@ export default defineConfig(
   createAzurePlaywrightConfig(config, {
     exposeNetwork: '<loopback>',
     connectTimeout: 3 * 60 * 1000, // 3 minutes
-    os: ServiceOS.LINUX,
-    credential: new DefaultAzureCredential(),
-  })
+    os: os,
+    credential: new DefaultAzureCredential()
+  }),
+  {
+    // adjust snapshotPathTemplate for remote browser OS
+    snapshotPathTemplate: `{testDir}/__screenshots__/{testFilePath}/${os}/{arg}{ext}`,
+  }
 );
