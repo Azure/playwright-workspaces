@@ -2,144 +2,80 @@
 
 This is a sample test suite demonstrating how to use Playwright with pytest for end-to-end testing. It supports both local browser execution and remote browser execution via Playwright Service.
 
-## 📁 Project Structure
+# Using Playwright Test Runner with Playwright Workspaces
 
-```
-playwright-pytest/
-├── conftest.py              # Global pytest configuration and fixtures
-├── pytest.ini              # pytest configuration file
-├── requirements.txt         # Python dependencies
-├── README.md               # This file
-├── .env.example            # Environment variables template
-├── test-results/           # Test artifacts (screenshots, etc.)
-└── tests/                  # Test files
-    └── test_example.py     # Sample Playwright tests
-```
+This sample demonstrates how to run Playwright tests using cloud-hosted browsers provided by [Playwright Workspace](https://aka.ms/pww/docs).
 
-## 🚀 Quick Start
+## How to Use this Sample
 
 ### Prerequisites
 
 - Python 3.8 or higher
 - pip (Python package installer)
 
-### Setup
+### Steps to Run
 
-1. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
+1. **Clone this repository and navigate to the sample**
 
-2. **Install Playwright browsers (for local testing only):**
-   ```bash
-   python -m playwright install
-   ```
+    ```bash
+    git clone https://github.com/Azure/playwright-workspaces.git
+    cd playwright-workspaces/samples/playwright-pytest
+    ```
 
-3. **Configure Playwright Service (optional):**
-   ```bash
-   # Copy the environment template
-   copy .env.example .env
-   
-   # Edit .env file with your Playwright Service details
-   # PLAYWRIGHT_SERVICE_URL=wss://your-service-name.playwright.io
-   # PLAYWRIGHT_SERVICE_ACCESS_TOKEN=your-access-token
-   ```
+2. **Install dependencies**
 
-## 🧪 Running Tests
+    ```bash
+    pip install -r requirements.txt
+    ```
+> 💡 Browsers are not required when using service
 
-### Basic Commands
+3. **Create a Playwright Workspace**  
+   Follow the [Getting Started guide](https://aka.ms/pww/docs/quickstart) to create your workspace.
 
-```bash
-# Run all tests in parallel
-python -m pytest tests/test_example.py -v -s --numprocesses 10
+4. **Set the Playwright Service endpoint**
 
-```
+    - **macOS / Linux**:
 
-### Environment Variables
+        ```bash
+        export PLAYWRIGHT_SERVICE_URL="wss://<your-service-endpoint>"
+        ```
 
-You can customize test execution using environment variables:
+    - **Windows PowerShell**:
 
-```bash
-# Run tests in headed mode (visible browser) - Local only
-set HEADLESS=false
-python -m pytest -v -s --numprocesses 10
+        ```powershell
+        $env:PLAYWRIGHT_SERVICE_URL = "wss://<your-service-endpoint>"
+        ```
+    > 💡 Or use .env file to declare required env variables.
+    
+5. **Set the Authentication with Playwright Service endpoint**
+    - **macOS / Linux**:
 
-```
+        ```bash
+        export PLAYWRIGHT_SERVICE_ACCESS_TOKEN="token"
+        ```
 
-## 🌐 Playwright Service Integration
+    - **Windows PowerShell**:
 
-This test suite supports running tests on remote browsers via Playwright Service. This allows you to run tests in the cloud without managing local browser installations.
+        ```powershell
+        $env:PLAYWRIGHT_SERVICE_ACCESS_TOKEN = "token"
+        ```
+    > 💡 Generate Token from playwright workspace
+    
+6. **Run the full test suite using the Playwright Workspaces configuration**
 
-### Setting up Playwright Service
+    ```bash
+    python -m pytest -v -s --numprocesses 10
+    ```
 
-1. **Create a .env file:**
-   ```bash
-   copy .env.example .env
-   ```
+    > 💡 Adjust the `--numprocesses` value based on your system resources and workspace quota. Use `--numprocesses=1` when debugging or running locally.
 
-2. **Configure your service connection in .env:**
-   ```bash
-   PLAYWRIGHT_SERVICE_URL=wss://your-service-name.playwright.io
-   PLAYWRIGHT_SERVICE_ACCESS_TOKEN=your-access-token
-   ```
 
-3. **Run tests with Playwright Service:**
-   ```bash
-   # Tests will automatically use the service if PLAYWRIGHT_SERVICE_URL is set
-   python -m pytest -v
-   ```
+## Need Help?
 
-### Local vs Service Testing
+If you run into issues, open an issue in this repository or refer to the [Playwright Workspaces documentation](https://aka.ms/pww/docs).
 
-| Mode | Browser Location | Configuration |
-|------|------------------|---------------|
-| **Local** | Your machine | Requires `python -m playwright install` |
-| **Service** | Remote cloud | Requires `PLAYWRIGHT_SERVICE_URL` in .env |
 
-**Automatic Detection:** The test suite automatically detects if you're using Playwright Service based on the `PLAYWRIGHT_SERVICE_URL` environment variable.
 
-### Benefits of Playwright Service
 
-- ✅ No local browser installation required
-- ✅ Consistent browser versions across environments
-- ✅ Scalable parallel execution
-- ✅ Reduced infrastructure maintenance
 
-## 📊 Test Reports and Artifacts
 
-Test failures automatically generate screenshots in the `test-results/screenshots/` directory.
-
-## 🔧 Configuration
-
-### pytest.ini
-
-Contains pytest configuration including:
-- Test discovery patterns
-- Default command-line options
-- Test markers
-
-### conftest.py
-
-Global configuration and fixtures:
-- Browser context configuration
-- Test data fixtures
-- Screenshot directory setup
-
-## 📝 Writing New Tests
-
-Follow the existing pattern in `test_example.py`:
-
-```python
-import pytest
-from playwright.sync_api import Page, expect
-
-def test_example(page: Page):
-    page.goto("https://example.com")
-    expect(page).to_have_title("Example Domain")
-```
-
-## 📖 Additional Resources
-
-- [Playwright Documentation](https://playwright.dev/python/)
-- [pytest Documentation](https://docs.pytest.org/)
-- [pytest-playwright Plugin](https://pytest-playwright.readthedocs.io/)
