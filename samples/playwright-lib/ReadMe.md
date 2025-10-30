@@ -12,7 +12,14 @@ $env:PLAYWRIGHT_SERVICE_URL="wss://...."
 ```
 $env:PLAYWRIGHT_SERVICE_ACCESS_TOKEN="TOKEN_VALUE"
 ```
+- Generate a guid and set to environment variable PLAYWRIGHT_RUN_ID
+```
+$env:PLAYWRIGHT_RUN_ID="your_guid"
+```
+
 - Run the example script
 ```
 npx ts-node src/example.ts
 ```
+
+- Test Runs get updated at 5 min interval, so check current test run details after 5 min of running script.
