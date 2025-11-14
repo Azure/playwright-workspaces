@@ -27,8 +27,7 @@ import { chromium } from 'playwright';
     await page.goto('https://google.com');
     const title = await page.title();
     console.log('📄 Page title:', title);
-    
-    // Don't close browser to keep it alive
+   
     await browser.close();
   } catch (error) {
     console.error('❌ Error:', error.message);
