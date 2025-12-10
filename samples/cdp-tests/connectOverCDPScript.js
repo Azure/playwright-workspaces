@@ -27,7 +27,7 @@ async function getRemoteBrowserWebSocketUrl() {
   try {
     console.log('🔍 Fetching CDP WebSocket URL...');
     const cdpUrl = await getRemoteBrowserWebSocketUrl();
-    console.log('✅ Got WebSocket URL:', cdpUrl);
+    console.debug('✅ Got WebSocket URL:', cdpUrl);
     
     console.log('🔌 Connecting to CDP server...');
     const browser = await chromium.connectOverCDP(cdpUrl,
@@ -51,7 +51,7 @@ async function getRemoteBrowserWebSocketUrl() {
     }
     
     console.log('🌐 Navigating to Google...');
-    await page.goto('https://google.com');
+    await page.goto('https://playwright.dev');
     const title = await page.title();
     console.log('📄 Page title:', title);
    
