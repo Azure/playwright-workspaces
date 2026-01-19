@@ -63,7 +63,10 @@ async def remote_browser() -> AsyncGenerator[Browser, None]:
     """
     cdp_url = await get_cdp_endpoint()
     async with async_playwright() as p:
-        browser = await p.chromium.connect_over_cdp(cdp_url)
+        browser = await p.chromium.connect_over_cdp(
+            cdp_url,
+            headers={"User-Agent": "Chrome-DevTools-Protocol/1.3"}
+        )
         try:
             yield browser
         finally:
