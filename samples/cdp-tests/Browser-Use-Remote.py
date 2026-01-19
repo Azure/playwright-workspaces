@@ -21,11 +21,10 @@ This script lets you search Amazon for products using a remote Playwright browse
 
 3️⃣ Playwright Remote Browser Setup
    - Sign up for Microsoft Playwright Cloud.
-   - Obtain your workspace ID, region, and access token.
+   - Obtain your service URL and access token.
    - Set the following environment variables:
 
-     export PLAYWRIGHT_SERVICE_WORKSPACE_ID="your_workspace_id"
-     export PLAYWRIGHT_SERVICE_REGION="your_region"
+     export PLAYWRIGHT_SERVICE_URL="wss://<region>.api.playwright.microsoft.com/playwrightworkspaces/<workspaceId>/browsers"
      export PLAYWRIGHT_SERVICE_ACCESS_TOKEN="your_access_token"
 
 ----------------------------------------
@@ -44,6 +43,7 @@ This script lets you search Amazon for products using a remote Playwright browse
 import asyncio
 import aiohttp
 import os
+import re
 from pydantic import BaseModel, Field
 from browser_use import Agent
 from browser_use.llm import AzureChatOpenAI
@@ -63,18 +63,38 @@ def get_llm():
     )
 
 # --- Remote Playwright Browser ---
+def parse_service_url(service_url: str) -> tuple[str, str]:
+    """
+    Parse the Playwright Service URL to extract region and workspace ID.
+    Expected format: wss://<region>.api.playwright.microsoft.com/playwrightworkspaces/<workspaceId>/browsers
+    """
+    pattern = r'wss://(\w+)\.api\.playwright\.microsoft\.com/playwrightworkspaces/([^/]+)/browsers'
+    match = re.match(pattern, service_url)
+    if not match:
+        raise ValueError(
+            f"Invalid PLAYWRIGHT_SERVICE_URL format. Expected: wss://<region>.api.playwright.microsoft.com/playwrightworkspaces/<workspaceId>/browsers"
+        )
+    return match.group(1), match.group(2)  # region, workspaceId
+
 async def create_remote_browser_session():
     """
     Create a remote Playwright browser session.
     Fetches the WebSocket URL internally and returns a BrowserSession.
     """
-    WORKSPACE_ID = os.getenv("PLAYWRIGHT_SERVICE_WORKSPACE_ID")
-    REGION = os.getenv("PLAYWRIGHT_SERVICE_REGION")
-    AUTH_TOKEN = os.getenv("PLAYWRIGHT_SERVICE_ACCESS_TOKEN")
+    SERVICE_URL = os.getenv("PLAYWRIGHT_SERVICE_URL")
+    ACCESS_TOKEN = os.getenv("PLAYWRIGHT_SERVICE_ACCESS_TOKEN")
 
-    api_url = f"https://{REGION}.api.playwright.microsoft.com/playwrightworkspaces/{WORKSPACE_ID}/browsers?os=linux&browser=chromium&playwrightVersion=cdp"
+    if not SERVICE_URL:
+        raise ValueError("PLAYWRIGHT_SERVICE_URL environment variable is not set")
+    if not ACCESS_TOKEN:
+        raise ValueError("PLAYWRIGHT_SERVICE_ACCESS_TOKEN environment variable is not set")
+
+    # Parse region and workspace ID from the service URL
+    region, workspace_id = parse_service_url(SERVICE_URL)
+
+    api_url = f"https://{region}.api.playwright.microsoft.com/playwrightworkspaces/{workspace_id}/browsers?os=linux&browser=chromium&playwrightVersion=cdp"
     headers = {
-        "Authorization": f"Bearer {AUTH_TOKEN}",
+        "Authorization": f"Bearer {ACCESS_TOKEN}",
         "Accept": "application/json",
         "User-Agent": "PlaywrightService-CDP-Client/1.0"
     }
@@ -85,7 +105,7 @@ async def create_remote_browser_session():
                 text = await response.text()
                 raise Exception(f"Failed to get remote browser URL: {response.status}, {text}")
             data = await response.json()
-            ws_url = data['wsEndpoint']
+            ws_url = data['endpoint']  # API returns 'endpoint', not 'wsEndpoint'
 
     profile = BrowserProfile(cdp_url=ws_url)
     return BrowserSession(browser_profile=profile)
