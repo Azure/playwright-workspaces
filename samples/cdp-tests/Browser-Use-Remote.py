@@ -31,7 +31,7 @@ This script lets you search Amazon for products using a remote Playwright browse
 📌 How to Use
 ----------------------------------------
 1️⃣ Run the script:
-    python browser_use_remote.py
+    python example_ai_agent.py
 
 2️⃣ Enter product keywords when prompted.
    (Default is "wireless mouse" if you press Enter.)
@@ -53,7 +53,7 @@ from browser_use.browser.profile import BrowserProfile
 load_dotenv()
 
 # Import the shared module
-from playwright_service_client import PlaywrightServiceClient
+from playwright_service_client import get_cdp_endpoint
 
 
 # --- Azure OpenAI Setup ---
@@ -72,16 +72,11 @@ def get_llm():
 # --- Remote Playwright Browser ---
 async def create_remote_browser_session() -> BrowserSession:
     """
-    Create a remote Playwright browser session using the shared client.
+    Create a remote Playwright browser session.
     Returns a BrowserSession configured for browser-use.
     """
-    # Use the shared client to get the CDP endpoint
-    client = PlaywrightServiceClient.from_env()
-    cdp_url = await client.get_cdp_endpoint()
-    
+    cdp_url = await get_cdp_endpoint()
     print(f"🔗 Connected to Playwright Service")
-    print(f"   Region: {client.region}")
-    print(f"   Workspace: {client.workspace_id}")
     
     profile = BrowserProfile(cdp_url=cdp_url)
     return BrowserSession(browser_profile=profile)
