@@ -22,7 +22,7 @@ This demonstrates a NON-TESTING scenario for manual browser automation.
 📌 How to Use
 ----------------------------------------
 1️⃣ Run the script:
-    python connect_cdp.py
+    python connectOverCDPScript.py
 
 2️⃣ The script will:
    - Connect to the remote browser
