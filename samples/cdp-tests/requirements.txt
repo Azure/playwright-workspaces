@@ -1,0 +1,14 @@
+# Microsoft Playwright Service - Python Samples Dependencies
+
+# Core (required for all samples)
+aiohttp>=3.8.0
+playwright>=1.40.0
+python-dotenv>=1.0.0
+
+# For test_runner.py (testing scenario)
+pytest>=7.0.0
+pytest-asyncio>=0.21.0
+
+# For browser_use_remote.py (AI agent scenario)
+pydantic>=2.0.0
+browser-use>=0.1.0
