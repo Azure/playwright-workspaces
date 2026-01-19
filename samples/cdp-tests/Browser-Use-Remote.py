@@ -8,7 +8,7 @@ This script lets you search Amazon for products using a remote Playwright browse
 📌 Prerequisites
 ----------------------------------------
 1️⃣ Python environment with the following packages installed:
-   pip install aiohttp pydantic browser-use
+   pip install aiohttp pydantic browser-use python-dotenv
 
 2️⃣ Hosted LLM Setup (Azure OpenAI)
    - Create an Azure OpenAI resource in the Azure Portal.
@@ -31,7 +31,7 @@ This script lets you search Amazon for products using a remote Playwright browse
 📌 How to Use
 ----------------------------------------
 1️⃣ Run the script:
-    python Browser-Use-Remote.py
+    python browser_use_remote.py
 
 2️⃣ Enter product keywords when prompted.
    (Default is "wireless mouse" if you press Enter.)
@@ -41,14 +41,20 @@ This script lets you search Amazon for products using a remote Playwright browse
 """
 
 import asyncio
-import aiohttp
 import os
-import re
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
+from dotenv import load_dotenv
 from browser_use import Agent
 from browser_use.llm import AzureChatOpenAI
 from browser_use.browser.session import BrowserSession
 from browser_use.browser.profile import BrowserProfile
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Import the shared module
+from playwright_service_client import PlaywrightServiceClient
+
 
 # --- Azure OpenAI Setup ---
 def get_llm():
@@ -62,53 +68,24 @@ def get_llm():
         api_version=os.environ["AZURE_OPENAI_API_VERSION"],
     )
 
+
 # --- Remote Playwright Browser ---
-def parse_service_url(service_url: str) -> tuple[str, str]:
+async def create_remote_browser_session() -> BrowserSession:
     """
-    Parse the Playwright Service URL to extract region and workspace ID.
-    Expected format: wss://<region>.api.playwright.microsoft.com/playwrightworkspaces/<workspaceId>/browsers
+    Create a remote Playwright browser session using the shared client.
+    Returns a BrowserSession configured for browser-use.
     """
-    pattern = r'wss://(\w+)\.api\.playwright\.microsoft\.com/playwrightworkspaces/([^/]+)/browsers'
-    match = re.match(pattern, service_url)
-    if not match:
-        raise ValueError(
-            f"Invalid PLAYWRIGHT_SERVICE_URL format. Expected: wss://<region>.api.playwright.microsoft.com/playwrightworkspaces/<workspaceId>/browsers"
-        )
-    return match.group(1), match.group(2)  # region, workspaceId
-
-async def create_remote_browser_session():
-    """
-    Create a remote Playwright browser session.
-    Fetches the WebSocket URL internally and returns a BrowserSession.
-    """
-    SERVICE_URL = os.getenv("PLAYWRIGHT_SERVICE_URL")
-    ACCESS_TOKEN = os.getenv("PLAYWRIGHT_SERVICE_ACCESS_TOKEN")
-
-    if not SERVICE_URL:
-        raise ValueError("PLAYWRIGHT_SERVICE_URL environment variable is not set")
-    if not ACCESS_TOKEN:
-        raise ValueError("PLAYWRIGHT_SERVICE_ACCESS_TOKEN environment variable is not set")
-
-    # Parse region and workspace ID from the service URL
-    region, workspace_id = parse_service_url(SERVICE_URL)
-
-    api_url = f"https://{region}.api.playwright.microsoft.com/playwrightworkspaces/{workspace_id}/browsers?os=linux&browser=chromium&playwrightVersion=cdp"
-    headers = {
-        "Authorization": f"Bearer {ACCESS_TOKEN}",
-        "Accept": "application/json",
-        "User-Agent": "PlaywrightService-CDP-Client/1.0"
-    }
-
-    async with aiohttp.ClientSession() as session:
-        async with session.get(api_url, headers=headers) as response:
-            if response.status != 200:
-                text = await response.text()
-                raise Exception(f"Failed to get remote browser URL: {response.status}, {text}")
-            data = await response.json()
-            ws_url = data['endpoint']  # API returns 'endpoint', not 'wsEndpoint'
-
-    profile = BrowserProfile(cdp_url=ws_url)
+    # Use the shared client to get the CDP endpoint
+    client = PlaywrightServiceClient.from_env()
+    cdp_url = await client.get_cdp_endpoint()
+    
+    print(f"🔗 Connected to Playwright Service")
+    print(f"   Region: {client.region}")
+    print(f"   Workspace: {client.workspace_id}")
+    
+    profile = BrowserProfile(cdp_url=cdp_url)
     return BrowserSession(browser_profile=profile)
+
 
 # --- Data Models ---
 class Product(BaseModel):
@@ -118,8 +95,10 @@ class Product(BaseModel):
     reviews: str | None = None
     url: str
 
+
 class ProductSearchResults(BaseModel):
     items: list[Product] = []
+
 
 # --- Amazon Search Function ---
 async def search_amazon_remote(keywords: str = 'wireless mouse'):
@@ -152,6 +131,7 @@ async def search_amazon_remote(keywords: str = 'wireless mouse'):
     print("✅ Search completed successfully!")
     return result
 
+
 # --- Main ---
 async def main():
     print("🛒 Amazon Product Search with Browser-Use + Azure OpenAI")
@@ -179,6 +159,7 @@ async def main():
 
     except Exception as e:
         print(f"❌ Error: {e}")
+
 
 if __name__ == '__main__':
     asyncio.run(main())
