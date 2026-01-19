@@ -53,7 +53,10 @@ async def main():
     
     # Step 2: Connect to remote browser using Playwright
     async with async_playwright() as p:
-        browser = await p.chromium.connect_over_cdp(cdp_url)
+        browser = await p.chromium.connect_over_cdp(
+            cdp_url,
+            headers={"User-Agent": "Chrome-DevTools-Protocol/1.3"}
+        )
         print(f"✅ Connected to remote browser")
         
         # Step 3: Use the browser
