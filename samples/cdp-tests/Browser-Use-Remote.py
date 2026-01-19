@@ -31,7 +31,7 @@ This script lets you search Amazon for products using a remote Playwright browse
 📌 How to Use
 ----------------------------------------
 1️⃣ Run the script:
-    python example_ai_agent.py
+    python Browser-Use-Remote.py
 
 2️⃣ Enter product keywords when prompted.
    (Default is "wireless mouse" if you press Enter.)
