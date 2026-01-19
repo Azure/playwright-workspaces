@@ -1,87 +1,90 @@
-import { chromium } from 'playwright';
+"""
+Connect Over CDP - Microsoft Playwright Service
 
-const SERVICE_URL = process.env.PLAYWRIGHT_SERVICE_URL;
-const ACCESS_TOKEN = process.env.PLAYWRIGHT_SERVICE_ACCESS_TOKEN;
+Simple example showing how to connect to a remote browser via CDP.
+This demonstrates a NON-TESTING scenario for manual browser automation.
 
-// Parse region and workspaceId from PLAYWRIGHT_SERVICE_URL
-// Format: wss://<region>.api.playwright.microsoft.com/playwrightworkspaces/<workspaceId>/browsers
-function parseServiceUrl(url: string) {
-  if (!url) {
-    throw new Error('PLAYWRIGHT_SERVICE_URL environment variable is not set');
-  }
-  
-  const urlPattern = /wss:\/\/(\w+)\.api\.playwright\.microsoft\.com\/playwrightworkspaces\/([^\/]+)\/browsers/;
-  const match = url.match(urlPattern);
-  
-  if (!match) {
-    throw new Error('Invalid PLAYWRIGHT_SERVICE_URL format. Expected: wss://<region>.api.playwright.microsoft.com/playwrightworkspaces/<workspaceId>/browsers');
-  }
-  
-  return {
-    region: match[1],
-    workspaceId: match[2]
-  };
-}
+----------------------------------------
+📌 Prerequisites
+----------------------------------------
+1️⃣ Python environment with the following packages installed:
+   pip install playwright aiohttp python-dotenv
 
-async function getRemoteBrowserWebSocketUrl() {
-  if (!ACCESS_TOKEN) {
-    throw new Error('PLAYWRIGHT_SERVICE_ACCESS_TOKEN environment variable is not set');
-  }
+2️⃣ Playwright Remote Browser Setup
+   - Sign up for Microsoft Playwright Service.
+   - Obtain your service URL and access token.
+   - Copy .env.example to .env and fill in your values:
 
-  const { region, workspaceId } = parseServiceUrl(SERVICE_URL!);
-  
-  const apiUrl = `https://${region}.api.playwright.microsoft.com/playwrightworkspaces/${workspaceId}/browsers?os=linux&browser=chromium&playwrightVersion=cdp`;
-  const headers = {
-    "Authorization": `Bearer ${ACCESS_TOKEN}`,
-    "Accept": "application/json",
-    "User-Agent": "PlaywrightService-CDP-Client/1.0"
-  };
+     PLAYWRIGHT_SERVICE_URL=wss://<region>.api.playwright.microsoft.com/playwrightworkspaces/<workspaceId>/browsers
+     PLAYWRIGHT_SERVICE_ACCESS_TOKEN=your_access_token
 
-  const response = await fetch(apiUrl, { headers });
-  
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`API request failed with status ${response.status}: ${errorText}`);
-  }
+----------------------------------------
+📌 How to Use
+----------------------------------------
+1️⃣ Run the script:
+    python connect_cdp.py
 
-  const data = await response.json();
-  return data.endpoint;  // ✅ Fixed: use 'endpoint' not 'wsEndpoint'
-} 
+2️⃣ The script will:
+   - Connect to the remote browser
+   - Navigate to example.com
+   - Take a screenshot
+   - Extract page content
+   - Click a link
+"""
 
-(async () => {
-  try {
-    console.log('🔍 Fetching CDP WebSocket URL...');
-    const cdpUrl = await getRemoteBrowserWebSocketUrl();
-    console.debug('✅ Got WebSocket URL:', cdpUrl);
+import asyncio
+from playwright.async_api import async_playwright
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
+from playwright_service_client import get_cdp_endpoint
+
+
+async def main():
+    """Connect to a remote browser via CDP and perform basic operations."""
     
-    console.log('🔌 Connecting to CDP server...');
-    const browser = await chromium.connectOverCDP(cdpUrl,
-    {headers:{'User-Agent': 'Chrome-DevTools-Protocol/1.3'}});
-    console.log('✅ Connected successfully!');
+    print("🔗 Connecting to Microsoft Playwright Service...")
     
-    const contexts = browser.contexts();
-    let context;
-    if (contexts.length > 0) {
-      context = contexts[0];
-    } else {
-      context = await browser.newContext();
-    }
+    # Step 1: Get CDP endpoint from the service
+    cdp_url = await get_cdp_endpoint()
+    print(f"✅ Got CDP endpoint")
     
-    const pages = context.pages();
-    let page;
-    if (pages.length > 0) {
-      page = pages[0];
-    } else {
-      page = await context.newPage();
-    }
-    
-    console.log('🌐 Navigating to playwright.dev...');
-    await page.goto('https://playwright.dev');
-    const title = await page.title();
-    console.log('📄 Page title:', title);
-   
-    await browser.close();
-  } catch (error: any) {
-    console.error('❌ Error:', error.message);
-  }
-})();
+    # Step 2: Connect to remote browser using Playwright
+    async with async_playwright() as p:
+        browser = await p.chromium.connect_over_cdp(cdp_url)
+        print(f"✅ Connected to remote browser")
+        
+        # Step 3: Use the browser
+        context = await browser.new_context()
+        page = await context.new_page()
+        
+        # Example: Navigate and take screenshot
+        print("📄 Navigating to example.com...")
+        await page.goto("https://example.com")
+        
+        title = await page.title()
+        print(f"📌 Page title: {title}")
+        
+        # Take a screenshot
+        await page.screenshot(path="screenshot.png")
+        print("📸 Screenshot saved to screenshot.png")
+        
+        # Example: Extract content
+        heading = await page.locator("h1").text_content()
+        print(f"📝 Page heading: {heading}")
+        
+        # Example: Click a link
+        await page.click("a")
+        await page.wait_for_load_state("networkidle")
+        print(f"🔗 Navigated to: {page.url}")
+        
+        # Cleanup
+        await context.close()
+        await browser.close()
+        print("✅ Done!")
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
