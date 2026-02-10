@@ -93,11 +93,10 @@ async def get_cdp_endpoint(
     region, workspace_id = _parse_url(service_url)
     
     # Build API URL
-    api_url = (
-        f"https://{region}.api.playwright.microsoft.com"
-        f"/playwrightworkspaces/{workspace_id}/browsers"
-        f"?api-version={api_version}&os={os_name}"
-    )
+     api_url = (
+    f"https://{region}.api.playwright.microsoft.com"
+    f"/playwrightworkspaces/{workspace_id}/browsers"
+    f"?os={os_name}&browser=chromium&playwrightVersion=cdp&shouldRedirect=false")
     
     # Make request
     headers = {
