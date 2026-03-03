@@ -238,11 +238,11 @@ For common migration problems and resolution tips, see:
 | **Portal Management** | All resource operations now in the Azure Portal                                                                                                                       |
 | **Workspace ID**      | Now a GUID (no `region_` prefix)                                                                                                                                      |
 
-### Reporting Changes
+### Playwright Workspaces Reporting
 
-Playwright Workspaces does not currently include built-in reporting. You can [publish Playwright HTML reports](https://playwright.dev/docs/ci-intro#publishing-report-on-the-web) using Azure Storage for similar results, but it requires manual setup.
+Reporting is now available to all users as a part of Playwright Workspaces. You can use the [QuickStart Guide](https://aka.ms/pww-reporting) and [Troubleshooting FAQs](https://aka.ms/pww-reporting-tsg) to get started.
 
-We’re tracking this topic and collecting feedback:  
+Share your feedback on Playwright Workspaces Reporting:  
 👉 [Discussion: Built-in Reporting for Playwright Workspaces](https://github.com/azure/playwright-workspaces/issues/23)
 
 ### Package and API Changes
