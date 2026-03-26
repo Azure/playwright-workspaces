@@ -45,13 +45,15 @@ from playwright_service_client import get_cdp_endpoint
 async def main():
     """Connect to a remote browser via CDP and perform basic operations."""
     
-    print("🔗 Connecting to Microsoft Playwright Service...")
+    print('🔗 Connecting to Microsoft Playwright Service...')
     
     # Step 1: Get CDP endpoint from the service
+    # TODO: This step will be simplified once OSS redirect support is added
     cdp_url = await get_cdp_endpoint()
-    print(f"✅ Got CDP endpoint")
+    print(f'✅ Got CDP endpoint')
     
     # Step 2: Connect to remote browser using Playwright
+    # TODO: User-Agent header override will be removed after service fix
     async with async_playwright() as p:
         browser = await p.chromium.connect_over_cdp(
             cdp_url,
