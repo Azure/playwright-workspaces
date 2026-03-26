@@ -22,12 +22,12 @@ async function main() {
   console.log('🔗 Connecting to Microsoft Playwright Service...');
   
   // Step 1: Get CDP endpoint from the service
-  // TODO: This step will be simplified once OSS redirect support is added
+  // This step will be simplified once OSS redirect support is added
   const cdpUrl = await getCdpEndpoint();
   console.log('✅ Got CDP endpoint');
   
   // Step 2: Connect to remote browser using Playwright
-  // TODO: User-Agent header override will be removed after service fix
+  // User-Agent header override will be removed after service fix
   const browser = await chromium.connectOverCDP(
     cdpUrl,
     { headers: { 'User-Agent': 'Chrome-DevTools-Protocol/1.3' } }
