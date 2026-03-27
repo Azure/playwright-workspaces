@@ -11,6 +11,7 @@ Samples for connecting to Microsoft Playwright Service via CDP (Chrome DevTools 
 | `connectOverCDPScript.py` | Python | **Manual** | Simple connect_over_cdp example |
 | `connectOverCDPScript.js` | JavaScript | **Manual** | Simple connectOverCDP example |
 | `test_runner.py` | Python | **Testing** | Test runner with helpers |
+| `check_test_run_metrics.py` | Python | **Monitoring** | Check test run metrics (browser minutes, worker count) |
 | `Browser-Use-Remote.py` | Python | **AI Agent** | Browser-Use + Azure OpenAI |
 
 ## 🚀 Quick Start
@@ -29,6 +30,7 @@ export PLAYWRIGHT_SERVICE_ACCESS_TOKEN="your_access_token"
 python connectOverCDPScript.py        # Basic CDP connection
 python test_runner.py                 # Run example tests
 pytest test_runner.py -v              # With pytest
+python check_test_run_metrics.py --run-id <your-run-id>  # Check test run metrics
 python Browser-Use-Remote.py          # AI agent (requires Azure OpenAI)
 ```
 
@@ -85,6 +87,27 @@ async with remote_page() as page:
     await page.goto("https://example.com")
     assert await page.title() == "Example Domain"
 ```
+
+### Check Test Run Metrics (Python)
+```bash
+# Check current metrics for a test run
+python check_test_run_metrics.py --run-id <your-test-run-id>
+
+# Wait until metrics are updated (useful after test completion)
+python check_test_run_metrics.py --run-id <your-test-run-id> --wait-for-update
+
+# Custom polling configuration
+python check_test_run_metrics.py --run-id <your-test-run-id> \
+    --wait-for-update \
+    --poll-interval 10 \
+    --timeout 300
+```
+
+This script helps you:
+- ✅ Verify that browser minutes have been calculated
+- ✅ Check worker count allocation
+- ✅ Monitor test run status
+- ✅ Wait for metrics to be updated after test completion
 
 ### AI Agent (Python)
 ```python
