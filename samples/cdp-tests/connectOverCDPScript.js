@@ -17,13 +17,49 @@
 
 import { chromium } from 'playwright';
 import { getCdpEndpoint } from './playwrightServiceClient.js';
+import { randomUUID } from 'crypto';
+import https from 'https';
 
 async function main() {
-  console.log('🔗 Connecting to Microsoft Playwright Service...');
+  // Generate a unique run ID
+  const runId = process.env.PLAYWRIGHT_RUN_ID || randomUUID();
   
-  // Step 1: Get CDP endpoint from the service
+  // Create test run for tracking
+  const match = process.env.PLAYWRIGHT_SERVICE_URL?.match(/^wss:\/\/([^\.]+)\.api\.playwright\.microsoft\.com\/playwrightworkspaces\/([^\/]+)\//); 
+  if (match) {
+    const url = new URL(`https://${match[1]}.reporting.api.playwright.microsoft.com/playwrightworkspaces/${match[2]}/test-runs/${runId}?api-version=2025-09-01`);
+    const payload = JSON.stringify({ displayName: runId, ciConfig: { providerName: 'GITHUB' } });
+    const req = https.request(url, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/merge-patch+json',
+        'Authorization': `Bearer ${process.env.PLAYWRIGHT_SERVICE_ACCESS_TOKEN}`
+      }
+    }, res => {
+      let data = '';
+      res.on('data', chunk => (data += chunk));
+      res.on('end', () => {
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          console.log(`✅ Test run created: ${runId}`);
+        } else {
+          console.log(`⚠️  Test run creation failed: ${res.statusCode} - ${data}`);
+        }
+      });
+    });
+    req.on('error', err => console.log(`⚠️  Test run creation error: ${err.message}`));
+    req.write(payload);
+    req.end();
+  }
+  
+  console.log('🔗 Connecting to Microsoft Playwright Service...');
+  console.log(`📊 Run ID: ${runId}`);
+  
+  // Step 1: Get CDP endpoint from the service with run ID
   // This step will be simplified once OSS redirect support is added
-  const cdpUrl = await getCdpEndpoint();
+  let cdpUrl = await getCdpEndpoint();
+  // Append run ID to track this session
+  const separator = cdpUrl.includes('?') ? '&' : '?';
+  cdpUrl = `${cdpUrl}${separator}runId=${runId}`;
   console.log('✅ Got CDP endpoint');
   
   // Step 2: Connect to remote browser using Playwright
