@@ -1,0 +1,6 @@
+azure-identity
+azure-mgmt-playwright
+azure-developer-playwright
+jupyter
+pandas
+python-dotenv
