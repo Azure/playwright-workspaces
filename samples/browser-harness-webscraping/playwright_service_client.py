@@ -57,17 +57,15 @@ def get_cdp_browsers_endpoint(
 ) -> str:
     """
     Get the SERVICE_URL that an agent can use to get browsers that it can connect to via CDP
-    """
     Args:
         service_url: Service URL (defaults to PLAYWRIGHT_SERVICE_URL env var)
         access_token: Access token (defaults to PLAYWRIGHT_SERVICE_ACCESS_TOKEN env var)
         
     Returns:
-        WebSocket URL for CDP connection
+        URL for getting CDP browsers
         
     Example:
-        cdp_url = await get_cdp_endpoint()
-        browser = await playwright.chromium.connect_over_cdp(cdp_url)
+        SERVICE_URL = await get_cdp_browsers_endpoint()
     """
     # Get credentials from env vars if not provided
     service_url = service_url or os.getenv("PLAYWRIGHT_SERVICE_URL")
