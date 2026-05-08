@@ -71,47 +71,7 @@ Once connected, confirm with a screenshot that the remote browser is alive.
 Once this done, you can ask your agent to use browser-harness with playwright remote browsers to perform web scraping. Use a prompt similar to something like this:
 
 ```text
-Use browser-harness to scrape this website with 10 parallel remote browsers from Playwright Service.
- 
- Target:
- - Website: <URL>
- - Information to extract: <INFORMATION HERE>
- - Output format: <TABLE / JSON / CSV>
- - Save artifacts to: <FOLDER>
- 
- Remote browser requirements:
- 1. Create 10 independent Playwright Service remote browser sessions.
- 2. Each sub-agent must use a unique BU_NAME, for example:
-    scrape-worker-01 ... scrape-worker-10
- 3. Each sub-agent must resolve its own sessionUrl using this two-step flow:
-    - HTTP GET SERVICE_URL with shouldRedirect=false and a 120s timeout.
-    - Parse JSON response.sessionUrl.
-    - Set BU_CDP_WS to that sessionUrl only in the same process environment as browser-harness.
- 4. Do not write SERVICE_URL, access keys, or resolved WebSocket URLs to disk.
- 5. Do not use .env for BU_CDP_WS.
- 7. Close each remote session after scraping.
- 
- Get the SERVICE_URL by running `get_cdp_browsers_endpoint()` method from `playwright_service_client.py`
- 
- Work splitting:
- - Decompose the scrape into 10 independent chunks.
- - Dispatch all 10 workers in parallel.
- - Each worker should scrape only its assigned chunk.
- - After all workers complete, merge and deduplicate results.
- - Validate the final output against the requested count/schema.
- 
- For each worker, require this final response:
- - Assigned chunk
- - Remote routing proof: BU_NAME used and confirmation that BU_CDP_WS pointed to Playwright Service
- - Items scraped
- - Screenshot path
- - Whether the remote session was closed
- - Any blockers
- 
- Final response:
- - Return the merged scraped data.
- - Mention any chunks that failed or were partial.
- - Confirm all remote sessions were closed.
+Go to ecommerce websites (Website1, Website2) and search for gifts under 500 for 10 year old kids which is useful, reusable and not single time use. Delivery in Bengaluru should be within 3 days. It should be such that 5 pieces of the item are available. Create independent Playwright Service remote browser sessions per website and use one sub-agent per website to browse in parallel using browser harness. Clone each remote session after scraping.
 ```
 
 ## More Resources
