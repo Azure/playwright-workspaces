@@ -65,7 +65,7 @@ def get_cdp_browsers_endpoint(
         URL for getting CDP browsers
         
     Example:
-        SERVICE_URL = await get_cdp_browsers_endpoint()
+        SERVICE_URL = get_cdp_browsers_endpoint()
     """
     # Get credentials from env vars if not provided
     service_url = service_url or os.getenv("PLAYWRIGHT_SERVICE_URL")
@@ -88,6 +88,6 @@ def get_cdp_browsers_endpoint(
     api_url = (
         f"https://{region}.api.playwright.microsoft.com"
         f"/playwrightworkspaces/{workspace_id}/browsers"
-        f"?os=linux&browser=chromium&playwrightVersion=cdp&shouldRedirect=false")
+        f"?os=linux&browser=chromium&playwrightVersion=cdp&shouldRedirect=false&accessKey={access_token}")
 
     return api_url
