@@ -88,6 +88,6 @@ def get_cdp_browsers_endpoint(
     api_url = (
         f"https://{region}.api.playwright.microsoft.com"
         f"/playwrightworkspaces/{workspace_id}/browsers"
-        f"?os={os_name}&browser=chromium&playwrightVersion=cdp&shouldRedirect=false")
+        f"?os=linux&browser=chromium&playwrightVersion=cdp&shouldRedirect=false")
 
     return api_url
