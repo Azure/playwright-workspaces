@@ -1,0 +1,15 @@
+{
+  "name": "pww-proxy-server",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "server.mjs",
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "proxy-chain": "^2.5.7"
+  }
+}

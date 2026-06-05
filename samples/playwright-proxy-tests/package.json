@@ -1,0 +1,16 @@
+{
+  "name": "pww-proxy-samples",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "description": "Three working samples for using an authenticated HTTP proxy with Microsoft Playwright Workspaces remote Chromium.",
+  "scripts": {
+    "sample:connect-over-cdp": "node connectOverCdp.mjs",
+    "sample:raw-cdp": "node rawCdp.mjs",
+    "sample:playwright-connect": "node playwrightConnect.mjs"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "playwright": "^1.48.0"
+  }
+}
