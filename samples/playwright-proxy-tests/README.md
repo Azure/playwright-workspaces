@@ -2,11 +2,14 @@
 
 Three runnable Node.js samples showing how to route a remote Chromium on
 **Microsoft Playwright Workspaces (PWW)** through an **authenticated outbound
-HTTP proxy**, plus the proxy itself (deployable to Azure with one script).
+HTTP proxy** that you provide.
 
 The samples are deliberately small (one file each, no test framework, no
 abstraction layer) so you can read the entire request flow end to end and
 copy the parts you need into your own code.
+
+> You bring your own authenticated forward proxy. These samples only show
+> how to drive PWW through one — they do not deploy a proxy for you.
 
 ---
 
@@ -20,13 +23,7 @@ playwright-proxy-tests/
 ├── connectOverCdp.mjs        ← Sample 1: Playwright over CDP (recommended)
 ├── rawCdp.mjs                ← Sample 2: hand-rolled CDP JSON-RPC
 ├── playwrightConnect.mjs     ← Sample 3: Playwright native wire protocol
-├── pwwSessionClient.mjs      ← helper: gets a CDP wss:// URL from PWW
-└── proxy-server/             ← the authenticated proxy (deploy to Azure)
-    ├── server.mjs
-    ├── Dockerfile
-    ├── deploy-azure.ps1
-    ├── package.json
-    └── README.md
+└── pwwSessionClient.mjs      ← helper: gets a CDP wss:// URL from PWW
 ```
 
 ---
@@ -37,11 +34,15 @@ The three samples are **not** identical demos. They differ in (a) what wire
 protocol talks to the remote browser and (b) how much of the proxy auth dance
 *you* have to write. They also differ in which steps they run:
 
-| File | Wire protocol to PWW | Proxy auth handled by | Direct step? | Proxied step? | Private origin step? |
+| File | Wire protocol to PWW | Proxy auth handled by | Direct step? | Proxied step? | Proxy-only URL step? |
 | --- | --- | --- | :---: | :---: | :---: |
 | [connectOverCdp.mjs](connectOverCdp.mjs)    | CDP (`chromium.connectOverCDP`) | Playwright (internal `Fetch.*`) | yes | yes | yes |
 | [rawCdp.mjs](rawCdp.mjs)                    | CDP (raw WebSocket JSON-RPC)    | **You — `Fetch.enable` + `Fetch.continueWithAuth`** | no | yes | yes |
 | [playwrightConnect.mjs](playwrightConnect.mjs) | Playwright native wire protocol (`chromium.connect`) | PWW server-side (you never see the 407) | yes | yes | yes |
+
+The "proxy-only URL" step navigates to `PROXY_ONLY_URL` from `.env` (see
+[Setup](#setup-one-time) below) — plug in any URL you want fetched through
+the proxy.
 
 ---
 
@@ -56,7 +57,7 @@ then runs:
 | ---: | --- | --- | --- |
 | 1 | `browser.newContext()` (no proxy) | `https://api.ipify.org` | the PWW container's egress IP |
 | 2 | `browser.newContext({ proxy })`   | `https://api.ipify.org` | the **proxy's** egress IP |
-| 3 | same proxied context              | `http://intranet.local:9090` | JSON from the private origin |
+| 3 | same proxied context              | `$PROXY_ONLY_URL`         | whatever your URL returns |
 
 The proxy `407` is handled inside Playwright — your code is just
 `newContext({ proxy: { server, username, password } })`.
@@ -79,12 +80,12 @@ Runtime.enable                                           (so we can Runtime.eval
 Fetch.enable { handleAuthRequests:true, patterns:[*] }   (you now own the auth)
 ```
 
-Then it runs two steps through that one proxied session:
+Then it runs through that proxied session:
 
 | Step | URL | Expected output |
 | ---: | --- | --- |
-| 1 | `https://api.ipify.org`        | the proxy's egress IP |
-| 2 | `http://intranet.local:9090`   | JSON from the private origin |
+| 1 | `https://api.ipify.org` | the proxy's egress IP |
+| 2 | `$PROXY_ONLY_URL`       | whatever your URL returns |
 
 Run with `$env:CDP_DEBUG=1` to print every frame the script sends (`>>`) and
 receives (`<<`).
@@ -96,9 +97,9 @@ URL). The connection uses Playwright's native wire protocol over WebSocket,
 authenticated with `Authorization: Bearer <PAT>`. No CDP frames cross your
 laptop's network — PWW relays everything on the server side.
 
-Runs the same three steps as Sample 1. The observable behaviour is identical;
-the difference is purely the on-the-wire protocol and where the auth dance
-happens (PWW relays it for you).
+Runs the same steps as Sample 1, including the `$PROXY_ONLY_URL` step. The
+observable behaviour is identical; the difference is purely the on-the-wire
+protocol and where the auth dance happens (PWW relays it for you).
 
 ---
 
@@ -179,11 +180,14 @@ You need:
 
 - **Node.js 18+** (for built-in `WebSocket` and `fetch`).
 - **A PWW workspace** + an access token (Azure portal → your Playwright Workspaces resource).
-- **An authenticated HTTP proxy.** Either point at your own, or deploy the one
-  in [proxy-server/](proxy-server/) to Azure Container Instances — see
-  [proxy-server/README.md](proxy-server/README.md). If you use someone else's
-  proxy you won't get the `intranet.local:9090` step; the other two steps
-  still work.
+- **An authenticated HTTP proxy you control.** Point the samples at it via
+  `PROXY_SERVER` / `PROXY_USERNAME` / `PROXY_PASSWORD`. To prove the proxy is
+  actually in the request path, the samples compare the egress IP reported by
+  `api.ipify.org` with and without the proxy — they should differ.
+- **A URL to fetch through the proxy.** Set `PROXY_ONLY_URL` in `.env` to
+  any hostname your proxy can reach — a private intranet origin, an
+  IP-allowlisted service, or even a public URL. Each sample's final step
+  navigates to it through the proxied context.
 
 Then:
 
@@ -196,7 +200,7 @@ npm install
 Copy-Item .env.example .env
 # Edit .env and fill in:
 #   PLAYWRIGHT_SERVICE_URL, PLAYWRIGHT_SERVICE_ACCESS_TOKEN,
-#   PROXY_SERVER, PROXY_USERNAME, PROXY_PASSWORD
+#   PROXY_SERVER, PROXY_USERNAME, PROXY_PASSWORD, PROXY_ONLY_URL
 ```
 
 > `.env` is gitignored. Never commit real credentials.
@@ -222,10 +226,11 @@ npm run sample:playwright-connect
 $env:DEBUG="pw:*"; node playwrightConnect.mjs 2>pw.log; Remove-Item env:DEBUG
 ```
 
-Expected: in Samples 1 and 3, the direct step prints one IP, the proxied step
-prints a different IP. In Sample 2, the single proxied step prints the same
-IP as Samples 1 and 3's proxied step. All three private-origin steps print
-the same JSON payload from the proxy container's loopback service.
+Expected: in Samples 1 and 3, the direct step prints one IP and the proxied
+step prints a different IP (the proxy's egress IP). In Sample 2, the single
+proxied IP step prints the same IP as Samples 1 and 3's proxied step. The
+final step in each sample prints the body of `PROXY_ONLY_URL` fetched
+through the proxied context.
 
 ---
 
@@ -249,8 +254,7 @@ the same JSON payload from the proxy container's loopback service.
   (per-context proxy, etc.) behave the same.
 - **Egress IPs.**
   - PWW direct → an IP from the Microsoft-owned PWW egress range (varies by region).
-  - Via the proxy → the SNAT IP of your proxy container (printed by
-    `deploy-azure.ps1`).
+  - Via the proxy → the egress (SNAT) IP of your proxy.
 
 ---
 
@@ -263,7 +267,7 @@ the same JSON payload from the proxy container's loopback service.
 | Script hangs on the first proxied navigation.     | Most common: `PROXY_USERNAME` / `PROXY_PASSWORD` don't match what the proxy was deployed with — the proxy keeps returning 407. |
 | `rawCdp.mjs` hangs even though direct CDP works.  | You probably forgot to forward non-auth `Fetch.requestPaused` events with `Fetch.continueRequest`. `Fetch.enable` pauses **every** request. |
 | Proxy creds appear on an origin site.             | You're answering `Fetch.authRequired` with `ProvideCredentials` regardless of `authChallenge.source`. Gate on `=== 'Proxy'`. |
-| Hangs on `intranet.local:9090`.                   | You're not using the proxy in [proxy-server/](proxy-server/) (or its container's `/etc/hosts` wasn't patched — see Dockerfile). |
+| `PROXY_ONLY_URL` step hangs or 502s.              | The URL isn't reachable through your proxy (DNS, ACL, or proxy isn't tunnelling CONNECT for that host). Try the URL from a client behind the proxy first. |
 | Sample 1/3 hangs on `newContext`.                 | Network can't reach PWW. Check corporate firewall lets `*.api.playwright.microsoft.com:443` through. |
 | `connectOverCdp.mjs` works, `rawCdp.mjs` doesn't connect at all. | You called `Target.attachToTarget` without `flatten: true`. PWW's single-socket model requires flattened sessions. |
 
@@ -271,8 +275,5 @@ the same JSON payload from the proxy container's loopback service.
 
 ## What to read next
 
-- [proxy-server/README.md](proxy-server/README.md) — how to deploy the proxy
-  to Azure Container Instances and why the `intranet.local:9090` private
-  origin is "proof" the tunnel works.
 - The top-of-file docstring in each `.mjs` — recaps the demo steps and gives
   copy-pasteable debug commands specific to that sample.

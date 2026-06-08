@@ -18,10 +18,11 @@
  *    Fetch.continueWithAuth { ProvideCredentials, username, password }
  *
  *  Demo runs two steps through the proxied session:
- *    1. PROXIED session   -> https://api.ipify.org?format=json
+ *    1. PROXIED session -> https://api.ipify.org?format=json
  *         (shows the PROXY's egress IP)
- *    2. SAME proxied sess -> http://intranet.local:9090/
- *         (private origin only reachable through the proxy)
+ *    2. SAME session   -> $PROXY_ONLY_URL
+ *         (fetches a URL of your choice through the proxy — e.g. a private
+ *          intranet origin only reachable via your proxy)
  *
  *  Run:
  *    node rawCdp.mjs
@@ -39,10 +40,9 @@ import { getCdpEndpoint } from './pwwSessionClient.mjs';
 //  Config                                                                    //
 // ─────────────────────────────────────────────────────────────────────────── //
 
-const { PROXY_SERVER, PROXY_USERNAME, PROXY_PASSWORD } = process.env;
+const { PROXY_SERVER, PROXY_USERNAME, PROXY_PASSWORD, PROXY_ONLY_URL } = process.env;
 
-const IPIFY_URL    = 'https://api.ipify.org?format=json';
-const INTRANET_URL = 'http://intranet.local:9090/';
+const IPIFY_URL = 'https://api.ipify.org?format=json';
 
 const DEBUG = process.env.CDP_DEBUG === '1';
 const trunc = (s, n = 200) => (s.length > n ? s.slice(0, n) + '…' : s);
@@ -177,21 +177,20 @@ listeners.add((m) => {
 }
 
 // ═════════════════════════════════════════════════════════════════════════ //
-//  STEP 2 — SAME proxied session → private intranet origin                  //
-//  intranet.local:9090 is a loopback service INSIDE the proxy container,    //
-//  unreachable from the public internet. Works only because the proxy is    //
-//  tunnelling CONNECT for that hostname.                                    //
+//  STEP 2 — SAME proxied session → a URL of your choice                     //
+//  Customer-supplied via PROXY_ONLY_URL in .env. Use any hostname that is   //
+//  reachable through your proxy.                                            //
 // ═════════════════════════════════════════════════════════════════════════ //
 
 {
     const loaded = waitForEvent(proxiedSession, 'Page.loadEventFired');
-    await send('Page.navigate', { url: INTRANET_URL }, proxiedSession);
+    await send('Page.navigate', { url: PROXY_ONLY_URL }, proxiedSession);
     await loaded;
 
     const { result } = await send('Runtime.evaluate',
         { expression: 'document.body.innerText' }, proxiedSession);
 
-    console.log('--- 2) PROXIED    -> intranet ---');
+    console.log(`--- 2) PROXIED    -> ${PROXY_ONLY_URL} ---`);
     console.log(result.value);
 }
 

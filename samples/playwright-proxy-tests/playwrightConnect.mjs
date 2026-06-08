@@ -10,13 +10,14 @@
  *  proxy-auth handshake (Fetch.* frames) is performed entirely server-side.
  *  From this laptop we never see a CDP frame.
  *
- *  Demo runs three steps so the output lines up with the other two samples:
+ *  Demo runs three steps:
  *    1. DIRECT  context -> https://api.ipify.org?format=json
- *         (shows the LAPTOP's view of the egress IP — the PWW container)
+ *         (shows the PWW container's public egress IP)
  *    2. PROXIED context -> https://api.ipify.org?format=json
  *         (shows the PROXY's egress IP — request went through the proxy)
- *    3. SAME proxied ctx -> http://intranet.local:9090/
- *         (private origin only reachable through the proxy)
+ *    3. SAME proxied ctx -> $PROXY_ONLY_URL
+ *         (fetches a URL of your choice through the proxy — e.g. a private
+ *          intranet origin only reachable via your proxy)
  *
  *  Run:
  *    node playwrightConnect.mjs
@@ -42,10 +43,10 @@ const {
     PROXY_SERVER,
     PROXY_USERNAME,
     PROXY_PASSWORD,
+    PROXY_ONLY_URL,
 } = process.env;
 
-const IPIFY_URL    = 'https://api.ipify.org?format=json';
-const INTRANET_URL = 'http://intranet.local:9090/';
+const IPIFY_URL = 'https://api.ipify.org?format=json';
 
 const PROXY = {
     server:   PROXY_SERVER,
@@ -97,28 +98,26 @@ await directContext.close();
 // ═════════════════════════════════════════════════════════════════════════ //
 
 const proxiedContext = await browser.newContext({ proxy: PROXY });
-const proxiedPage1   = await proxiedContext.newPage();
+const proxiedPage    = await proxiedContext.newPage();
 
-await proxiedPage1.goto(IPIFY_URL);
-const proxiedBody1 = await proxiedPage1.locator('body').innerText();
+await proxiedPage.goto(IPIFY_URL);
+const proxiedBody = await proxiedPage.locator('body').innerText();
 
 console.log('--- 2) PROXIED    -> ipify ---');
-console.log(proxiedBody1);
+console.log(proxiedBody);
 
 // ═════════════════════════════════════════════════════════════════════════ //
-//  STEP 3 — SAME proxied context → private intranet origin                  //
-//  `intranet.local:9090` is a loopback service running INSIDE the proxy     //
-//  container. Only reachable because the proxy is tunnelling CONNECT for    //
-//  that hostname.                                                           //
+//  STEP 3 — SAME proxied context → a URL of your choice                     //
+//  Customer-supplied via PROXY_ONLY_URL in .env. Use any hostname that is   //
+//  reachable through your proxy.                                            //
 // ═════════════════════════════════════════════════════════════════════════ //
 
-const proxiedPage2 = await proxiedContext.newPage();
+const proxyOnlyPage = await proxiedContext.newPage();
+await proxyOnlyPage.goto(PROXY_ONLY_URL);
+const proxyOnlyBody = await proxyOnlyPage.locator('body').innerText();
 
-await proxiedPage2.goto(INTRANET_URL);
-const proxiedBody2 = await proxiedPage2.locator('body').innerText();
-
-console.log('--- 3) PROXIED    -> intranet ---');
-console.log(proxiedBody2);
+console.log(`--- 3) PROXIED    -> ${PROXY_ONLY_URL} ---`);
+console.log(proxyOnlyBody);
 
 await proxiedContext.close();
 await browser.close();
