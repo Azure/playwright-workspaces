@@ -23,3 +23,20 @@ npx ts-node src/example.ts
 ```
 
 - Test Runs get updated at 5 min interval, so check current test run details after 5 min of running script.
+
+## Optional: route the run through an authenticated HTTP proxy
+
+The default [`src/example.ts`](./src/example.ts) talks to PWW directly. If you
+need every BrowserContext to go through an authenticated forward proxy, use
+the opt-in [`src/example-proxy.ts`](./src/example-proxy.ts) instead. It adds a
+`proxy` option to `browser.newContext()`; Playwright handles the 407
+challenge for you.
+
+```powershell
+$env:PROXY_SERVER   = "http://<your-proxy>:8080"
+$env:PROXY_USERNAME = "<user>"
+$env:PROXY_PASSWORD = "<password>"
+$env:PROXY_ONLY_URL = "http://intranet.example/healthcheck"
+
+npx ts-node src/example-proxy.ts
+```

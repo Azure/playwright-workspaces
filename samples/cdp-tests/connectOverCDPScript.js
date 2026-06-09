@@ -64,6 +64,33 @@ async function main() {
   console.log('✅ Done!');
 }
 
+// Opt-in proxy variant. Not invoked by default — change the entry point at
+// the bottom of this file to `mainWithProxy()` to use it. Requires
+// PROXY_SERVER / PROXY_USERNAME / PROXY_PASSWORD in your env. Playwright
+// answers the 407 challenge for you.
+async function mainWithProxy() {
+  const cdpUrl = await getCdpEndpoint();
+  const browser = await chromium.connectOverCDP(
+    cdpUrl,
+    { headers: { 'User-Agent': 'Chrome-DevTools-Protocol/1.3' } }
+  );
+
+  const context = await browser.newContext({
+    proxy: {
+      server: process.env.PROXY_SERVER,
+      username: process.env.PROXY_USERNAME,
+      password: process.env.PROXY_PASSWORD,
+    },
+  });
+  const page = await context.newPage();
+
+  await page.goto('https://example.com');
+  console.log(`📌 Page title (via proxy): ${await page.title()}`);
+
+  await context.close();
+  await browser.close();
+}
+
 main().catch(error => {
   console.error('❌ Error:', error.message);
   process.exit(1);

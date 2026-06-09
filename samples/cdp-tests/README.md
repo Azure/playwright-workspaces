@@ -8,8 +8,10 @@ Samples for connecting to Microsoft Playwright Service via CDP (Chrome DevTools 
 |------|----------|----------|-------------|
 | `playwright_service_client.py` | Python | Core Module | Shared Python client for all samples |
 | `playwrightServiceClient.js` | JavaScript | Core Module | Shared JavaScript client |
-| `connectOverCDPScript.py` | Python | **Manual** | Simple connect_over_cdp example |
-| `connectOverCDPScript.js` | JavaScript | **Manual** | Simple connectOverCDP example |
+| `connectOverCDPScript.py` | Python | **Manual** | Playwright `connect_over_cdp` example |
+| `connectOverCDPScript.js` | JavaScript | **Manual** | Playwright `connectOverCDP` example |
+| `puppeteerScript.js` | JavaScript | **Manual** | Puppeteer over CDP (proxy variant in same file) |
+| `cdpUseScript.py` | Python | **Manual** | Raw CDP via `cdp-use` (proxy variant in same file) |
 | `test_runner.py` | Python | **Testing** | Test runner with helpers |
 | `Browser-Use-Remote.py` | Python | **AI Agent** | Browser-Use + Azure OpenAI |
 
@@ -107,7 +109,26 @@ PLAYWRIGHT_SERVICE_ACCESS_TOKEN=your_access_token
 AZURE_OPENAI_API_KEY=your_api_key
 AZURE_OPENAI_ENDPOINT=https://<resource>.openai.azure.com/
 AZURE_OPENAI_API_VERSION=2023-07-01-preview
+
+# For the opt-in proxy snippets only
+PROXY_SERVER=http://<your-proxy>:8080
+PROXY_USERNAME=<user>
+PROXY_PASSWORD=<password>
 ```
+
+## 🌐 Optional: Authenticated HTTP proxy
+
+Each manual sample includes a separate proxy entry-point function alongside
+the normal `main()`. It isn't run by default — to use it, change the call at
+the bottom of the file from `main()` to the proxy variant and set
+`PROXY_SERVER` / `PROXY_USERNAME` / `PROXY_PASSWORD` in your env.
+
+- [connectOverCDPScript.js](./connectOverCDPScript.js) — `mainWithProxy()` uses `newContext({ proxy })`
+- [puppeteerScript.js](./puppeteerScript.js) — `mainWithProxy()` uses `createBrowserContext({ proxyServer })` + `page.authenticate()`
+- [cdpUseScript.py](./cdpUseScript.py) — `main_with_proxy()` uses `Target.createBrowserContext({ proxyServer })` + manual `Fetch.continueWithAuth`
+
+Playwright and Puppeteer answer the proxy 407 challenge for you; with
+`cdp-use` the function shows the full dance.
 
 ## 📚 Resources
 

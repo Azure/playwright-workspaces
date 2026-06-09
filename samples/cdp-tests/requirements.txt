@@ -12,3 +12,6 @@ pytest-asyncio>=0.21.0
 # For browser_use_remote.py (AI agent scenario)
 pydantic>=2.0.0
 browser-use>=0.1.0
+
+# For cdpUseProxyScript.py (opt-in proxy sample)
+cdp-use>=0.3.0
