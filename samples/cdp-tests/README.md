@@ -9,7 +9,7 @@ Samples for connecting to Microsoft Playwright Service via CDP (Chrome DevTools 
 | `playwright_service_client.py` | Python | Core Module | Shared Python client for all samples |
 | `playwrightServiceClient.js` | JavaScript | Core Module | Shared JavaScript client |
 | `connectOverCDPScript.py` | Python | **Manual** | Playwright `connect_over_cdp` example |
-| `connectOverCDPScript.js` | JavaScript | **Manual** | Playwright `connectOverCDP` example |
+| `connectOverCDPScript.js` | JavaScript | **Manual** | Playwright `connectOverCDP` example (proxy variant in same file) |
 | `puppeteerScript.js` | JavaScript | **Manual** | Puppeteer over CDP (proxy variant in same file) |
 | `cdpUseScript.py` | Python | **Manual** | Raw CDP via `cdp-use` (proxy variant in same file) |
 | `test_runner.py` | Python | **Testing** | Test runner with helpers |

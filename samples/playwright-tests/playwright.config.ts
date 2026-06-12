@@ -47,6 +47,27 @@ export default defineConfig({
       use: { ...devices['Desktop Safari'] },
     },
 
+    /*
+     * Opt-in project that routes every context through an authenticated HTTP
+     * forward proxy. Run only this project with `--project=proxy` and set
+     * PROXY_SERVER / PROXY_USERNAME / PROXY_PASSWORD in your env.
+     * Playwright handles the 407 challenge using `use.proxy`.
+     */
+    {
+      name: 'proxy',
+      testDir: './tests-proxy',
+      use: {
+        ...devices['Desktop Chrome'],
+        ...(process.env.PROXY_SERVER && {
+          proxy: {
+            server: process.env.PROXY_SERVER,
+            username: process.env.PROXY_USERNAME,
+            password: process.env.PROXY_PASSWORD,
+          },
+        }),
+      },
+    },
+
     /* Test against mobile viewports. */
     // {
     //   name: 'Mobile Chrome',

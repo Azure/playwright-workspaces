@@ -13,5 +13,5 @@ pytest-asyncio>=0.21.0
 pydantic>=2.0.0
 browser-use>=0.1.0
 
-# For cdpUseProxyScript.py (opt-in proxy sample)
+# For cdpUseScript.py (raw CDP sample; also used by its opt-in proxy variant)
 cdp-use>=0.3.0

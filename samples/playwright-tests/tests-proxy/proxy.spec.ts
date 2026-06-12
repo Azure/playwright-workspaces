@@ -1,9 +1,12 @@
 import { test, expect } from '@playwright/test';
 
 /**
- * Opt-in spec — only runs under playwright.service.proxy.config.ts.
+ * Opt-in spec — only runs under the `proxy` project in playwright.config.ts.
+ * Invoke with:
+ *   npx playwright test --config=playwright.service.config.ts --project=proxy
+ *
  * Set PROXY_ONLY_URL to a host reachable through your proxy
- * (e.g. a private intranet origin).
+ * (e.g. a private intranet origin). The spec is skipped if unset.
  */
 test('fetches PROXY_ONLY_URL through the proxied PWW context', async ({ page }) => {
   const target = process.env.PROXY_ONLY_URL;
