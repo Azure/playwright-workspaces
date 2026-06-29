@@ -120,8 +120,19 @@ async def main_with_proxy():
         def on_load(event, sid: Optional[str]) -> None:
             load_event.set()
 
-        client.register.Fetch.authRequired(on_auth)
-        client.register.Fetch.requestPaused(on_paused)
+        # cdp-use awaits any awaitable a handler RETURNS, on its single
+        # receive loop. If we awaited a client.send(...) inside the handler
+        # (or returned the coroutine/Task), that loop would block waiting for
+        # a reply it can't read yet -> deadlock. So schedule the async work as
+        # a background task and return None.
+        def on_auth_handler(event, sid: Optional[str]) -> None:
+            asyncio.create_task(on_auth(event, sid))
+
+        def on_paused_handler(event, sid: Optional[str]) -> None:
+            asyncio.create_task(on_paused(event, sid))
+
+        client.register.Fetch.authRequired(on_auth_handler)
+        client.register.Fetch.requestPaused(on_paused_handler)
         client.register.Page.loadEventFired(on_load)
 
         await client.send.Page.enable(session_id=session_id)
