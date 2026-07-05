@@ -33,23 +33,46 @@ This demonstrates a NON-TESTING scenario for manual browser automation.
 """
 
 import asyncio
+import os
+import uuid
+import aiohttp
 from playwright.async_api import async_playwright
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
 load_dotenv()
 
-from playwright_service_client import get_cdp_endpoint
+from playwright_service_client import get_cdp_endpoint, _parse_url
 
 
 async def main():
     """Connect to a remote browser via CDP and perform basic operations."""
     
-    print('🔗 Connecting to Microsoft Playwright Service...')
+    # Generate a unique run ID
+    run_id = os.getenv('PLAYWRIGHT_RUN_ID', str(uuid.uuid4()))
     
-    # Step 1: Get CDP endpoint from the service
+    # Create test run for tracking
+    region, workspace_id = _parse_url(os.getenv('PLAYWRIGHT_SERVICE_URL', ''))
+    url = f'https://{region}.reporting.api.playwright.microsoft.com/playwrightworkspaces/{workspace_id}/test-runs/{run_id}?api-version=2025-09-01'
+    payload = {'displayName': run_id, 'ciConfig': {'providerName': 'GITHUB'}}
+    headers = {'Content-Type': 'application/merge-patch+json', 'Authorization': f'Bearer {os.getenv("PLAYWRIGHT_SERVICE_ACCESS_TOKEN", "")}'}
+    async with aiohttp.ClientSession() as session:
+        response = await session.patch(url, json=payload, headers=headers)
+        if response.status >= 200 and response.status < 300:
+            print(f'✅ Test run created: {run_id}')
+        else:
+            text = await response.text()
+            print(f'⚠️  Test run creation failed: {response.status} - {text}')
+    
+    print('🔗 Connecting to Microsoft Playwright Service...')
+    print(f'📊 Run ID: {run_id}')
+    
+    # Step 1: Get CDP endpoint from the service with run ID
     # This step will be simplified once OSS redirect support is added
     cdp_url = await get_cdp_endpoint()
+    # Append run ID to track this session
+    separator = '&' if '?' in cdp_url else '?'
+    cdp_url = f"{cdp_url}{separator}runId={run_id}"
     print(f'✅ Got CDP endpoint')
     
     # Step 2: Connect to remote browser using Playwright
