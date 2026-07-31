@@ -53,6 +53,21 @@ This sample demonstrates how to run Playwright tests using cloud-hosted browsers
     npx playwright test tests/example.spec.ts --config=playwright.service.config.ts
     ```
 
+## Running locally without the Playwright Workspaces service
+
+Use the local config:
+
+```bash
+npx playwright test --config=playwright.config.ts
+```
+
+`webkit` is opt-in in this config because some local environments are missing required system libraries.  
+Enable it with:
+
+```bash
+INCLUDE_WEBKIT=1 npx playwright test --config=playwright.config.ts
+```
+
 ## Optional: route tests through an authenticated HTTP proxy
 
 If your tests need to reach a private origin via an authenticated forward
