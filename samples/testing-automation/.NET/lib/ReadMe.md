@@ -2,13 +2,13 @@
 
 This sample demonstrates how to run Playwright .NET to use browser at scale using Playwright Workspace. It showcases the benefits of accelerating test suite completion by leveraging more parallel cloud browsers. The tests are executed using dotnet library without Any runner.
 
-If you have not yet created a workspace, please follow the [Get Started guide](../../../README.md#get-started)
+If you have not yet created a workspace, please follow the [Get Started guide](../../../../README.md#get-started)
 
 ### Sample setup
 1. Clone this sample:
     ```powershell
     git clone https://github.com/Azure/playwright-workspaces/
-    cd playwright-workspaces/samples/.NET/lib
+    cd playwright-workspaces/samples/testing-automation/.NET/lib
     ```
 
 1. Install dependencies:

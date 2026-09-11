@@ -43,7 +43,7 @@ The skill folder is portable:
 
 ```bash
 # from the root of your own project
-cp -r path/to/playwright-workspaces/samples/app-verification-skills/sample-app/.github/skills/verify .github/skills/
+cp -r path/to/playwright-workspaces/samples/testing-automation/app-verification-skills/sample-app/.github/skills/verify .github/skills/
 ```
 
 Then `copilot` → `/verify` works the same way in your repo.

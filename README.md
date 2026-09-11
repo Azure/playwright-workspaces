@@ -2,7 +2,7 @@
 
 > ✅ **Playwright Workspaces is now Generally Available!**
 
-[Playwright Workspaces](https://aka.ms/pww/docs) is a fully managed service for end-to-end web testing, built on top of [Playwright](https://playwright.dev). With Playwright Workspaces, you can significantly speed up test execution by running tests in parallel using managed cloud-based browers. The service takes care of the underlying infrastructure and complexity, allowing you to validate your web app across major browsers on both Linux and Windows—so you can ship features faster and with greater confidence.
+[Playwright Workspaces](https://aka.ms/pww/docs) is a fully managed service for end-to-end web testing, built on top of [Playwright](https://playwright.dev). With Playwright Workspaces, you can significantly speed up test execution by running tests in parallel using managed cloud-based browsers. The service takes care of the underlying infrastructure and complexity, allowing you to validate your web app across major browsers on both Linux and Windows—so you can ship features faster and with greater confidence.
 
 👉 [Get started with the Quickstart](https://aka.ms/pww/docs/quickstart)
 
@@ -21,13 +21,21 @@ There you’ll learn how to:
 
 ## Samples
 
-Explore sample projects for different test runners:
+Explore sample projects for testing and agentic browser automation.
 
-- [Playwright Test with JavaScript/TypeScript](./samples/playwright-tests/)
-- [NUnit with C#](./samples/.NET)
-- [Python](./samples/playwright-python/)
-- [Playwright Library projects](./samples/playwright-lib/)
-- [App Verification Skills (verify skill)](./samples/app-verification-skills/)
+### Testing automation
+
+- [Playwright Test with JavaScript/TypeScript](./samples/testing-automation/playwright-tests/)
+- [.NET with NUnit and the Playwright library](./samples/testing-automation/.NET/)
+- [Python with the Playwright library](./samples/testing-automation/playwright-python/)
+- [Python with pytest](./samples/testing-automation/playwright-pytest/)
+- [Playwright Library with JavaScript/TypeScript](./samples/testing-automation/playwright-lib/)
+- [Chrome DevTools Protocol (CDP)](./samples/testing-automation/cdp-tests/)
+- [App Verification Skills (`verify` skill)](./samples/testing-automation/app-verification-skills/)
+
+### Agentic automation
+
+- [Parallel web scraping with Browser Harness](./samples/agentic-automation/browser-harness-webscraping/)
 
 ## Migrating from Microsoft Playwright Testing
 

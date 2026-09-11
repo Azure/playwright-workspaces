@@ -8,7 +8,7 @@ This sample demonstrates how to run Playwright tests using cloud-hosted browsers
 
     ```bash
     git clone https://github.com/Azure/playwright-workspaces.git
-    cd playwright-workspaces/samples/playwright-tests
+    cd playwright-workspaces/samples/testing-automation/playwright-tests
     ```
 
 2. **Install dependencies**

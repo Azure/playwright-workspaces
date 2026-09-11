@@ -19,7 +19,7 @@ This sample demonstrates how to run Playwright tests using cloud-hosted browsers
 
     ```bash
     git clone https://github.com/Azure/playwright-workspaces.git
-    cd playwright-workspaces/samples/playwright-pytest
+    cd playwright-workspaces/samples/testing-automation/playwright-pytest
     ```
 
 2. **Install dependencies**
@@ -73,7 +73,6 @@ This sample demonstrates how to run Playwright tests using cloud-hosted browsers
 ## Need Help?
 
 If you run into issues, open an issue in this repository or refer to the [Playwright Workspaces documentation](https://aka.ms/pww/docs).
-
 
 
 

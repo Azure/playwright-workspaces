@@ -4,13 +4,13 @@ This sample demonstrates how to run Playwright .NET tests at scale using Playwri
 
 Note: Since service integration is done via [playwright NUnit base class](https://playwright.dev/dotnet/docs/test-runners) which uses BrowserService so it only works out of the box when you use one of the following base class BrowserTest, Page, ContextTest
 
-If you have not yet created a workspace, please follow the [Get Started guide](../../../README.md#get-started)
+If you have not yet created a workspace, please follow the [Get Started guide](../../../../README.md#get-started)
 
 ### Sample setup
 1. Clone this sample:
     ```powershell
     git clone https://github.com/Azure/playwright-workspaces/
-    cd playwright-workspaces/samples/.NET/NUnit
+    cd playwright-workspaces/samples/testing-automation/.NET/NUnit
     ```
 
 1. Install dependencies:
@@ -76,4 +76,3 @@ Note that by default NUnit will run all test files in parallel, while running te
 
 ### How to add custom param in service
 Follow the sample [here](https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/loadtestservice/Azure.Developer.Playwright.NUnit/samples/Sample2_CustomisingServiceParameters.md)
-
