@@ -28,6 +28,7 @@ Explore sample projects for different test runners:
 - [Python](./samples/playwright-python/)
 - [Playwright Library projects](./samples/playwright-lib/)
 - [Foundry Prompt Agents using Playwright Workspaces Remote MCP](./samples/remote-mcp/foundry-prompt-agents/)
+- [Foundry Hosted Agents using Playwright Workspaces Remote MCP](./samples/remote-mcp/foundry-hosted-agents/)
 - [App Verification Skills (verify skill)](./samples/app-verification-skills/)
 
 ## Migrating from Microsoft Playwright Testing
