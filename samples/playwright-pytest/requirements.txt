@@ -1,5 +1,5 @@
 # Core testing dependencies
-pytest==8.4.2
+pytest==9.0.3
 pytest-playwright==0.7.1
 
 # Additional pytest plugins
