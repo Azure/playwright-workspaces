@@ -1,0 +1,25 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.microsoft/playwright-cloud-browsers",
+  "title": "Playwright Cloud Browsers",
+  "description": "Managed Playwright cloud browsers for scalable browser automation and AI agent workflows",
+  "version": "1.0.0",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://{region}.mcp.playwright.microsoft.com/playwrightworkspaces/{workspaceId}/mcp",
+      "variables": {
+        "region": {
+          "description": "Azure region hosting the Playwright workspace",
+          "isRequired": true,
+          "placeholder": "eastus"
+        },
+        "workspaceId": {
+          "description": "Playwright workspace ID",
+          "isRequired": true
+        }
+      }
+    }
+  ],
+  "websiteUrl": "https://aka.ms/pww/mcp/docs"
+}
