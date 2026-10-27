@@ -3,7 +3,7 @@
   "name": "com.microsoft/playwright-cloud-browsers",
   "title": "Playwright Cloud Browsers",
   "description": "Managed Playwright cloud browsers for scalable browser automation and AI agent workflows",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "remotes": [
     {
       "type": "streamable-http",
@@ -21,5 +21,9 @@
       }
     }
   ],
+  "repository": {
+    "url": "https://github.com/Azure/playwright-workspaces/",
+    "source": "github"
+  },
   "websiteUrl": "https://aka.ms/pww/mcp/docs"
 }
